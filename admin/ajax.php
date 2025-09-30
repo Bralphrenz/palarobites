@@ -126,6 +126,34 @@ if ($action == 'save_menu') {
     exit();
 }
 
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
+
+    // ✅ Confirm order
+    if ($action == 'confirm_order') {
+        $id = $_POST['id'];
+        $update = $conn->query("UPDATE orders SET status = 1 WHERE id = $id");
+        echo $update ? 1 : $conn->error;
+        exit;
+    }
+
+    // ✅ Set order as In Delivery
+    if ($action == 'set_in_delivery') {
+        $id = $_POST['id'];
+        $update = $conn->query("UPDATE orders SET status = 2 WHERE id = $id");
+        echo $update ? 1 : $conn->error;
+        exit;
+    }
+
+    // ✅ Set order as Delivered
+    if ($action == 'set_delivered') {
+        $id = $_POST['id'];
+        $update = $conn->query("UPDATE orders SET status = 3 WHERE id = $id");
+        echo $update ? 1 : $conn->error;
+        exit;
+    }
+}
+
 if ($action == 'delete_menu') {
     $id = $_POST['id'];
     $conn->query("DELETE FROM product_list WHERE id = $id");

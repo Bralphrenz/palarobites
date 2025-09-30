@@ -53,29 +53,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+      @import 'tailwindcss';
+      
+      @theme inline {
+        --font-serif: 'Playfair Display', serif;
+        --font-body: 'Lora', serif;
+      }
+      
+      body {
+        font-family: var(--font-body);
+      }
+      
+      .font-display {
+        font-family: var(--font-serif);
+      }
+      
+      /* Monochrome grayscale filter for background */
+      .monochrome-bg {
+        filter: grayscale(100%);
+      }
+      
+      /* Elegant shadow in grayscale */
+      .elegant-shadow {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Smooth transitions */
+      .transition-elegant {
+        transition: all 0.3s ease;
+      }
+    </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 flex items-center justify-center relative overflow-hidden">
+<body class="min-h-screen bg-gray-50 flex items-center justify-center relative overflow-hidden">
 
+  <!-- Updated background with monochrome styling -->
   <div class="absolute inset-0 z-0 pointer-events-none">
-    <img src="assets/img/restaurant-bg.jpg" alt="Restaurant" class="w-full h-full object-cover opacity-20 blur-sm">
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-blue-100/80 to-blue-200/80"></div>
-    <span class="absolute top-10 left-10 w-24 h-24 bg-blue-200 rounded-full opacity-40 animate-pulse"></span>
-    <span class="absolute bottom-10 right-10 w-32 h-32 bg-blue-300 rounded-full opacity-30 animate-ping"></span>
-    <span class="absolute top-1/2 left-1/2 w-16 h-16 bg-blue-100 rounded-full opacity-30 animate-bounce" style="transform: translate(-50%, -50%);"></span>
+    <img src="assets/img/restaurant-bg.jpg" alt="Restaurant" class="w-full h-full object-cover opacity-10 monochrome-bg">
+    <div class="absolute inset-0 bg-white/70"></div>
   </div>
 
-  <div class="relative z-10 w-full max-w-md mx-auto">
-    <div class="bg-white/90 rounded-3xl shadow-2xl px-8 py-10 transition-transform duration-300 hover:scale-105 hover:shadow-blue-200/40 hover:shadow-2xl">
-      <div class="flex flex-col items-center mb-8">
-        <div class="bg-gradient-to-tr from-blue-500 to-blue-300 rounded-full p-5 shadow-lg mb-3 animate-glow">
-          <i class="fas fa-utensils text-white text-5xl drop-shadow-lg"></i>
+  <div class="relative z-10 w-full max-w-md mx-auto px-4">
+    <!-- Black and white color scheme with elegant borders -->
+    <div class="bg-white rounded-sm elegant-shadow border border-gray-300 px-10 py-12">
+      
+      <div class="flex flex-col items-center mb-10 border-b border-gray-300 pb-8">
+        <div class="mb-4">
+          <i class="fas fa-utensils text-black text-4xl"></i>
         </div>
-        <h1 class="text-4xl font-extrabold text-blue-600 tracking-tight mb-1 drop-shadow">Welcome Back!</h1>
-        <p class="text-gray-500 text-base">Sign in to order your favorite food</p>
+        <h1 class="text-3xl font-display font-semibold text-black tracking-wide mb-2">Welcome Back</h1>
+        <p class="text-gray-600 text-sm">Please sign in to continue</p>
       </div>
 
       <?php if (isset($error_message)): ?>
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 flex items-center animate-shake">
+        <!-- Error message in grayscale -->
+        <div class="bg-gray-100 border border-gray-400 text-gray-800 px-4 py-3 rounded-sm mb-6 flex items-center text-sm">
           <i class="fas fa-exclamation-circle mr-2"></i>
           <?php echo htmlspecialchars($error_message); ?>
         </div>
@@ -83,70 +119,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <form method="POST" action="login.php" class="space-y-6">
         <div>
-          <label for="username" class="block text-gray-700 font-semibold mb-1">Username or Email</label>
+          <label for="username" class="block text-black font-medium mb-2 text-sm">Username or Email</label>
           <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-blue-400">
-              <i class="fas fa-user"></i>
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+              <i class="fas fa-user text-sm"></i>
             </span>
             <input type="text" id="username" name="username" required
-              class="w-full pl-10 pr-3 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-blue-50 transition"
+              class="w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500 bg-white transition-elegant text-black"
               placeholder="Enter your username or email" autocomplete="username">
           </div>
         </div>
 
         <div>
-          <label for="password" class="block text-gray-700 font-semibold mb-1">Password</label>
+          <label for="password" class="block text-black font-medium mb-2 text-sm">Password</label>
           <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-blue-400">
-              <i class="fas fa-lock"></i>
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+              <i class="fas fa-lock text-sm"></i>
             </span>
             <input type="password" id="password" name="password" required
-              class="w-full pl-10 pr-10 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-blue-50 transition"
+              class="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500 bg-white transition-elegant text-black"
               placeholder="Enter your password" autocomplete="current-password">
             <button type="button" id="togglePassword" tabindex="-1"
-              class="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-400 focus:outline-none"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 focus:outline-none hover:text-black transition-elegant"
               aria-label="Show password">
-              <i class="fas fa-eye" id="togglePasswordIcon"></i>
+              <i class="fas fa-eye text-sm" id="togglePasswordIcon"></i>
             </button>
           </div>
         </div>
 
+        <!-- Black button with white text -->
         <button type="submit"
-          class="w-full bg-gradient-to-r from-blue-500 to-blue-400 text-white py-2 px-4 rounded-lg font-bold text-lg shadow-md hover:from-blue-600 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition flex items-center justify-center gap-2">
-          <i class="fas fa-sign-in-alt"></i> Log In
+          class="w-full bg-black text-white py-3 px-4 rounded-sm font-medium text-base shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-elegant flex items-center justify-center gap-2">
+          <i class="fas fa-sign-in-alt text-sm"></i> Log In
         </button>
 
-        <div class="text-center text-sm mt-4">
+        <div class="text-center text-sm mt-6 pt-6 border-t border-gray-300">
           <p class="text-gray-600">Don't have an account?
-            <a href="register.php" class="font-medium text-blue-600 hover:text-blue-800 transition">Register here</a>
+            <a href="register.php" class="font-medium text-black hover:text-gray-700 transition-elegant underline">Register here</a>
           </p>
         </div>
       </form>
-      <div class="text-center mt-6">
-        <a href="index.php" class="text-blue-500 hover:text-blue-700 font-medium transition">
-          <i class="fas fa-arrow-left mr-2"></i> Back to Home
+      
+      <div class="text-center mt-4">
+        <a href="index.php" class="text-gray-600 hover:text-black font-medium transition-elegant text-sm">
+          <i class="fas fa-arrow-left mr-2 text-xs"></i> Back to Home
         </a>
       </div>
     </div>
   </div>
-
-  <style>
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 0 0 #60a5fa, 0 0 0 0 #38bdf8; }
-      50% { box-shadow: 0 0 32px 8px #60a5fa, 0 0 16px 4px #38bdf8; }
-    }
-    .animate-glow {
-      animation: glow 2.5s infinite;
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-8px); }
-      40%, 80% { transform: translateX(8px); }
-    }
-    .animate-shake {
-      animation: shake 0.4s;
-    }
-  </style>
 
   <script>
     document.getElementById('togglePassword').addEventListener('click', function () {

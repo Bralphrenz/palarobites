@@ -114,18 +114,34 @@ a.custom-menu-list span.icon{
       </h2>
     </a>
 
+    <!-- Orders for Verification -->
     <div class="bg-white rounded-2xl shadow p-6 relative overflow-hidden">
       <div class="absolute right-4 top-4 text-yellow-200 text-4xl pointer-events-none"><i class="fas fa-clipboard-list"></i></div>
       <h5 class="text-gray-500 font-semibold mb-2">Orders for Verification</h5>
       <h2 class="text-3xl font-bold text-right text-yellow-600"><?php echo number_format($conn->query("SELECT COUNT(*) AS total FROM `orders` WHERE `status` = 0")->fetch_assoc()['total']); ?></h2>
     </div>
+
+    <!-- Confirmed Orders -->
     <div class="bg-white rounded-2xl shadow p-6 relative overflow-hidden">
       <div class="absolute right-4 top-4 text-blue-200 text-4xl pointer-events-none"><i class="fas fa-check-circle"></i></div>
       <h5 class="text-gray-500 font-semibold mb-2">Confirmed Orders</h5>
       <h2 class="text-3xl font-bold text-right text-blue-600"><?php echo number_format($conn->query("SELECT COUNT(*) AS total FROM `orders` WHERE `status` = 1")->fetch_assoc()['total']); ?></h2>
     </div>
+
+    <!-- In Delivery Orders -->
+    <div class="bg-white rounded-2xl shadow p-6 relative overflow-hidden">
+      <div class="absolute right-4 top-4 text-indigo-200 text-4xl pointer-events-none"><i class="fas fa-truck"></i></div>
+      <h5 class="text-gray-500 font-semibold mb-2">In Delivery</h5>
+      <h2 class="text-3xl font-bold text-right text-indigo-600"><?php echo number_format($conn->query("SELECT COUNT(*) AS total FROM `orders` WHERE `status` = 2")->fetch_assoc()['total']); ?></h2>
+    </div>
+
+    <!-- Delivered Orders -->
+    <div class="bg-white rounded-2xl shadow p-6 relative overflow-hidden">
+      <div class="absolute right-4 top-4 text-gray-200 text-4xl pointer-events-none"><i class="fas fa-box"></i></div>
+      <h5 class="text-gray-500 font-semibold mb-2">Delivered Orders</h5>
+      <h2 class="text-3xl font-bold text-right text-gray-600"><?php echo number_format($conn->query("SELECT COUNT(*) AS total FROM `orders` WHERE `status` = 3")->fetch_assoc()['total']); ?></h2>
+    </div>
   </div>
 </div>
 
-<?php $conn->query("SELECT * FROM `product_list` WHERE `status` = 0")->num_rows; ?>
 <?php $conn->close(); ?>

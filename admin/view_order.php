@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<!-- <div class="container-fluid">
 	
 	<table class="table table-bordered">
 		<thead>
@@ -59,4 +59,4 @@
 			}
 		})
 	}
-</script>
+</script> -->

@@ -1,64 +1,84 @@
-<?php include 'db_connect.php'; ?>
+<?php 
+include 'db_connect.php'; 
+?>
+
 <div class="pl-64 pt-16 min-h-screen bg-gray-50">
   <div class="container mx-auto mt-8 px-4">
     <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
-      <h5 class="text-3xl font-extrabold mb-8 text-green-700 tracking-tight flex items-center gap-3">
-        <i class="fa fa-clipboard-list text-green-400"></i> Orders
+      <h5 class="text-3xl font-extrabold mb-8 text-green-600 tracking-tight border-b pb-4">
+        Orders
       </h5>
-      <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-        <table class="min-w-full divide-y divide-gray-200 bg-white rounded-xl">
-          <thead class="bg-green-50">
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-gray-700">
+          <thead class="bg-green-600 text-white text-xs uppercase tracking-wider">
             <tr>
-              <th class="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase tracking-wider">#</th>
-              <th class="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Name</th>
-              <th class="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Address</th>
-              <th class="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Email</th>
-              <th class="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Mobile</th>
-              <th class="px-4 py-3 text-center text-xs font-bold text-green-700 uppercase tracking-wider">Status</th>
-              <th class="px-4 py-3 text-center text-xs font-bold text-green-700 uppercase tracking-wider">Action</th>
+              <th class="px-4 py-3 text-left">Order ID</th>
+              <th class="px-4 py-3 text-left">Customer</th>
+              <th class="px-4 py-3 text-left">Address</th>
+              <th class="px-4 py-3 text-left">Mobile</th>
+              <th class="px-4 py-3 text-left">Email</th>
+              <th class="px-4 py-3 text-center">Status</th>
+              <th class="px-4 py-3 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-100">
-            <?php 
-            $i = 1;
-            if ($conn->connect_error) {
-                echo "<tr><td colspan='7' class='text-center text-red-600'>Database connection failed: " . $conn->connect_error . "</td></tr>";
-            } else {
-              $qry = $conn->query("SELECT * FROM orders");
-              if (!$qry) {
-                  echo "<tr><td colspan='7' class='text-center text-red-600'>Error fetching orders: " . $conn->error . "</td></tr>";
-              } else {
-                  while ($row = $qry->fetch_assoc()):
+          <tbody class="divide-y divide-gray-200">
+            <?php
+              $orders = $conn->query("SELECT * FROM orders ORDER BY id DESC");
+              while($row = $orders->fetch_assoc()):
             ?>
-            <tr class="hover:bg-green-50 transition">
-              <td class="px-4 py-3 font-semibold text-gray-700"><?php echo $i++ ?></td>
-              <td class="px-4 py-3"><?php echo htmlspecialchars($row['name']) ?></td>
-              <td class="px-4 py-3"><?php echo htmlspecialchars($row['address']) ?></td>
-              <td class="px-4 py-3"><?php echo htmlspecialchars($row['email']) ?></td>
-              <td class="px-4 py-3"><?php echo htmlspecialchars($row['mobile']) ?></td>
-              <td class="px-4 py-3 text-center">
-                <?php if ($row['status'] == 1): ?>
-                  <span class="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold shadow">Confirmed</span>
-                <?php else: ?>
-                  <span class="inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold shadow">For Verification</span>
-                <?php endif; ?>
-              </td>
-              <td class="px-4 py-3 text-center space-x-2">
-                <button class="view_order inline-flex items-center px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded shadow transition" data-id="<?php echo $row['id'] ?>">
-                  <i class="fa fa-eye mr-1"></i> View
-                </button>
-                <?php if ($row['status'] == 0): ?>
-                  <button class="confirm-order-btn inline-flex items-center px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-xs font-semibold rounded shadow transition" data-id="<?php echo $row['id'] ?>">
-                    <i class="fa fa-check mr-1"></i> Confirm
+              <tr class="hover:bg-gray-50 transition duration-150">
+                <td class="px-4 py-3 font-bold text-gray-900">#<?php echo $row['id'] ?></td>
+                <td class="px-4 py-3"><?php echo $row['name'] ?></td>
+                <td class="px-4 py-3"><?php echo $row['address'] ?></td>
+                <td class="px-4 py-3"><?php echo $row['mobile'] ?></td>
+                <td class="px-4 py-3"><?php echo $row['email'] ?></td>
+                <td class="px-4 py-3 text-center">
+                  <?php if ($row['status'] == 1): ?>
+                    <span class="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold shadow">
+                      Confirmed
+                    </span>
+                  <?php elseif($row['status'] == 2): ?>
+                    <span class="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold shadow">
+                      In Delivery
+                    </span>  
+                  <?php elseif($row['status'] == 3): ?>
+                    <span class="inline-block px-3 py-1 rounded-full bg-gray-200 text-gray-700 text-xs font-bold shadow">
+                      Delivered
+                    </span>
+                  <?php else: ?>
+                    <span class="inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold shadow">
+                      For Verification
+                    </span>
+                  <?php endif; ?>
+                </td>
+                <td class="px-4 py-3 text-center space-x-2">
+                  <button class="view_order px-3 py-1 bg-indigo-500 text-white rounded-xl text-xs font-bold shadow hover:bg-indigo-600" 
+                          data-id="<?php echo $row['id'] ?>">
+                    View
                   </button>
-                <?php endif; ?>
-              </td>
-            </tr>
-            <?php 
-                  endwhile;
-              }
-            }
-            ?>
+
+                  <?php if ($row['status'] == 0): ?>
+                    <button onclick="updateStatus(<?php echo $row['id'] ?>, 'confirm_order')" 
+                      class="px-3 py-1 bg-green-500 text-white rounded-xl text-xs font-bold shadow hover:bg-green-600">
+                      Confirm
+                    </button>
+                  <?php elseif ($row['status'] == 1): ?>
+                    <button onclick="updateStatus(<?php echo $row['id'] ?>, 'set_in_delivery')" 
+                      class="px-3 py-1 bg-blue-500 text-white rounded-xl text-xs font-bold shadow hover:bg-blue-600">
+                      Mark as for Delivery
+                    </button>
+                  <?php elseif ($row['status'] == 2): ?>
+                    <button onclick="updateStatus(<?php echo $row['id'] ?>, 'set_delivered')" 
+                      class="px-3 py-1 bg-gray-500 text-white rounded-xl text-xs font-bold shadow hover:bg-gray-600">
+                      Mark as Delivered
+                    </button>
+                  <?php else: ?>
+                    <span class="text-gray-400 text-xs">No Actions</span>
+                  <?php endif; ?>
+                </td>
+              </tr>
+            <?php endwhile; ?>
           </tbody>
         </table>
       </div>
@@ -83,6 +103,27 @@
 </style>
 
 <script>
+  // Update order status
+  function updateStatus(id, action) {
+    if (!confirm("Are you sure you want to update this order?")) return;
+
+    fetch('ajax.php?action=' + action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'id=' + id
+    })
+    .then(res => res.text())
+    .then(resp => {
+      if (resp == 1) {
+        alert("Order updated successfully!");
+        location.reload();
+      } else {
+        alert("Error: " + resp);
+      }
+    })
+    .catch(err => alert("Request failed: " + err));
+  }
+
   // View Order Modal
   document.querySelectorAll('.view_order').forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -103,36 +144,15 @@
     });
   });
 
-  // Close modal on close button
+  // Close modal
   document.getElementById('closeOrderModal').onclick = function() {
     document.getElementById('orderModal').classList.add('hidden');
   };
-  // Close modal when clicking outside the modal content
   document.getElementById('orderModal').onclick = function(e) {
     if (e.target === this) {
       this.classList.add('hidden');
     }
   };
-
-  // Confirm order button handler
-  document.querySelectorAll('.confirm-order-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var orderId = this.getAttribute('data-id');
-      if (confirm('Are you sure you want to confirm this order?')) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'confirm_order.php', true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-          if (xhr.status === 200 && xhr.responseText.trim() === 'success') {
-            alert('Order confirmed!');
-            location.reload();
-          } else {
-            alert('Failed to confirm order.');
-          }
-        };
-        xhr.send('id=' + encodeURIComponent(orderId));
-      }
-    });
-  });
 </script>
+
 <?php $conn->close(); ?>
