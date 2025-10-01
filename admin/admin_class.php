@@ -1,5 +1,7 @@
 <?php
 session_start();
+$_SESSION['role'] = 'admin';
+$_SESSION['role'] = 'user';
 Class Action {
 	private $db;
 

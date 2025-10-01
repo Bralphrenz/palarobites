@@ -347,12 +347,15 @@ if ($action == 'delete_cart') {
     exit();
 }
 
+// Always start session if not started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 if(isset($_GET['action'])) {
     $action = $_GET['action'];
     switch($action) {
-        // 🔴 existing cases (cart, products, etc.)
-        
-        // ✅ NEW: send message
+        // ✅ send message
         case 'send_message':
             if(!isset($_SESSION['user_id'])){
                 echo json_encode(["success"=>false,"error"=>"Not logged in"]);
@@ -387,27 +390,25 @@ if(isset($_GET['action'])) {
             $stmt->execute();
 
             echo json_encode(["success"=>true]);
-            break;
+            exit;
 
-        // ✅ NEW: fetch messages
+        // ✅ fetch messages
         case 'fetch_messages':
-            if(!isset($_SESSION['user_id'])){
-                echo json_encode(["success"=>false]);
+            if (!isset($_SESSION['user_id'])) {
+                echo json_encode(["success" => false, "error" => "No session"]);
                 exit;
             }
             $user_id = $_SESSION['user_id'];
-
-            // get role
-            $roleQ = $conn->prepare("SELECT role FROM user_info WHERE user_id=?");
-            $roleQ->bind_param("i", $user_id);
-            $roleQ->execute();
-            $roleRes = $roleQ->get_result()->fetch_assoc();
+            $stmt = $conn->prepare("SELECT role FROM user_info WHERE user_id=?");
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+            $roleRes = $stmt->get_result()->fetch_assoc();
             $role = $roleRes['role'] ?? 'user';
 
-            if($role === 'admin'){
+            if ($role === 'admin') {
                 $partner_id = intval($_GET['user_id'] ?? 0);
-                if($partner_id <= 0){
-                    echo json_encode(["success"=>false,"error"=>"No user selected"]);
+                if ($partner_id <= 0) {
+                    echo json_encode(["success" => false, "error" => "No user selected"]);
                     exit;
                 }
             } else {
@@ -415,19 +416,22 @@ if(isset($_GET['action'])) {
             }
 
             $q = $conn->prepare("SELECT * FROM messages 
-                                WHERE (sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?) 
-                                ORDER BY created_at ASC");
+                                 WHERE (sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?) 
+                                 ORDER BY created_at ASC");
             $q->bind_param("iiii", $user_id, $partner_id, $partner_id, $user_id);
             $q->execute();
             $res = $q->get_result();
 
             $messages = [];
-            while($row = $res->fetch_assoc()){
+            while ($row = $res->fetch_assoc()) {
                 $messages[] = $row;
             }
 
-            echo json_encode(["success"=>true,"messages"=>$messages]);
-            break;
+            echo json_encode([
+                "success" => true,
+                "messages" => $messages
+            ]);
+            exit;
     }
 }
 
