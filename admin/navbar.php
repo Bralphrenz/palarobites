@@ -1,79 +1,50 @@
-<style>
-  #sidebar {
-    background-color: #f8f9fa; 
-    color: #343a40; 
-    height: 100vh;
-    position: fixed;
-    width: 250px;
-    padding-top: 20px;
-    transition: all 0.3s ease;
-    border-right: 1px solid #dee2e6; 
-  }
-
-  #sidebar .sidebar-list a {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    color: #495057; 
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-
-  #sidebar .sidebar-list a:hover,
-  #sidebar .sidebar-list a.active {
-    background-color: #e9ecef;
-    color: #212529; 
-    border-left: 4px solid #0d6efd; 
-  }
-
-  #sidebar .icon-field {
-    margin-right: 10px;
-    font-size: 18px;
-    color: #6c757d; 
-  }
-
-  #sidebar .sidebar-header {
-    font-size: 20px;
-    font-weight: bold;
-    color: #343a40; 
-    text-align: center;
-    margin-bottom: 20px;
-    padding: 10px 0;
-    border-bottom: 1px solid #dee2e6; 
-  }
-</style>
-
-<nav id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-white border-r border-gray-200 shadow-lg z-40 flex flex-col">
-  <div class="text-2xl font-bold text-green-700 text-center py-6 border-b border-gray-100 tracking-wide" style="font-family: 'Dancing Script', cursive;">
+<nav id="sidebar" class="fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-gray-900 to-gray-800 border-r border-gray-700 shadow-2xl z-40 flex flex-col">
+  <div class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 text-center py-6 border-b border-gray-700 tracking-wide" style="font-family: 'Cormorant Garamond', serif;">
     Admin Panel
   </div>
-  <div class="flex-1 flex flex-col gap-1 mt-4">
-    <a href="index.php?page=home" class="nav-item nav-home flex items-center px-6 py-3 text-gray-700 font-medium rounded-l-full hover:bg-green-50 hover:text-green-700 transition group">
-      <span class="mr-4 text-lg text-gray-400 group-hover:text-green-500"><i class="fa fa-home"></i></span> Home
+  
+  <div class="flex-1 flex flex-col gap-2 mt-6 px-3">
+    <a href="index.php?page=home" class="nav-item nav-home flex items-center px-4 py-3 text-gray-300 font-medium rounded-lg hover:bg-gray-700/50 hover:text-yellow-400 transition-all duration-300 group">
+      <span class="mr-3 text-lg text-gray-500 group-hover:text-yellow-400 transition-colors duration-300"><i class="fa fa-home"></i></span> 
+      <span style="font-family: 'Montserrat', sans-serif;">Home</span>
     </a>
-    <a href="index.php?page=orders" class="nav-item nav-orders flex items-center px-6 py-3 text-gray-700 font-medium rounded-l-full hover:bg-green-50 hover:text-green-700 transition group">
-      <span class="mr-4 text-lg text-gray-400 group-hover:text-green-500"><i class="fa fa-list"></i></span> Orders
+    
+    <a href="index.php?page=orders" class="nav-item nav-orders flex items-center px-4 py-3 text-gray-300 font-medium rounded-lg hover:bg-gray-700/50 hover:text-yellow-400 transition-all duration-300 group">
+      <span class="mr-3 text-lg text-gray-500 group-hover:text-yellow-400 transition-colors duration-300"><i class="fa fa-list"></i></span> 
+      <span style="font-family: 'Montserrat', sans-serif;">Orders</span>
     </a>
-    <a href="index.php?page=menu" class="nav-item nav-menu flex items-center px-6 py-3 text-gray-700 font-medium rounded-l-full hover:bg-green-50 hover:text-green-700 transition group">
-      <span class="mr-4 text-lg text-gray-400 group-hover:text-green-500"><i class="fa fa-list"></i></span> Menu
+    
+    <a href="index.php?page=messages" class="nav-item nav-messages flex items-center px-4 py-3 text-gray-300 font-medium rounded-lg hover:bg-gray-700/50 hover:text-yellow-400 transition-all duration-300 group">
+      <span class="mr-3 text-lg text-gray-500 group-hover:text-yellow-400 transition-colors duration-300"><i class="fa fa-comments"></i></span> 
+      <span style="font-family: 'Montserrat', sans-serif;">Messages</span>
     </a>
-    <a href="index.php?page=categories" class="nav-item nav-categories flex items-center px-6 py-3 text-gray-700 font-medium rounded-l-full hover:bg-green-50 hover:text-green-700 transition group">
-      <span class="mr-4 text-lg text-gray-400 group-hover:text-green-500"><i class="fa fa-list"></i></span> Category List
+    
+    <a href="index.php?page=menu" class="nav-item nav-menu flex items-center px-4 py-3 text-gray-300 font-medium rounded-lg hover:bg-gray-700/50 hover:text-yellow-400 transition-all duration-300 group">
+      <span class="mr-3 text-lg text-gray-500 group-hover:text-yellow-400 transition-colors duration-300"><i class="fa fa-list"></i></span> 
+      <span style="font-family: 'Montserrat', sans-serif;">Menu</span>
     </a>
+    
+    <a href="index.php?page=categories" class="nav-item nav-categories flex items-center px-4 py-3 text-gray-300 font-medium rounded-lg hover:bg-gray-700/50 hover:text-yellow-400 transition-all duration-300 group">
+      <span class="mr-3 text-lg text-gray-500 group-hover:text-yellow-400 transition-colors duration-300"><i class="fa fa-list"></i></span> 
+      <span style="font-family: 'Montserrat', sans-serif;">Category List</span>
+    </a>
+    
     <?php if (isset($_SESSION['login_type']) && $_SESSION['login_type'] == 1): ?>
-      <a href="index.php?page=users" class="nav-item nav-users flex items-center px-6 py-3 text-gray-700 font-medium rounded-l-full hover:bg-green-50 hover:text-green-700 transition group">
-        <span class="mr-4 text-lg text-gray-400 group-hover:text-green-500"><i class="fa fa-users"></i></span> Users
+      <a href="index.php?page=users" class="nav-item nav-users flex items-center px-4 py-3 text-gray-300 font-medium rounded-lg hover:bg-gray-700/50 hover:text-yellow-400 transition-all duration-300 group">
+        <span class="mr-3 text-lg text-gray-500 group-hover:text-yellow-400 transition-colors duration-300"><i class="fa fa-users"></i></span> 
+        <span style="font-family: 'Montserrat', sans-serif;">Users</span>
       </a>
-      <a href="index.php?page=site_settings" class="nav-item nav-site_settings flex items-center px-6 py-3 text-gray-700 font-medium rounded-l-full hover:bg-green-50 hover:text-green-700 transition group">
-        <span class="mr-4 text-lg text-gray-400 group-hover:text-green-500"><i class="fa fa-cogs"></i></span> Site Settings
+      
+      <a href="index.php?page=site_settings" class="nav-item nav-site_settings flex items-center px-4 py-3 text-gray-300 font-medium rounded-lg hover:bg-gray-700/50 hover:text-yellow-400 transition-all duration-300 group">
+        <span class="mr-3 text-lg text-gray-500 group-hover:text-yellow-400 transition-colors duration-300"><i class="fa fa-cogs"></i></span> 
+        <span style="font-family: 'Montserrat', sans-serif;">Site Settings</span>
       </a>
     <?php endif; ?>
   </div>
-  <div class="mb-6 px-6">
+  <div class="mb-6 px-4">
     <a href="ajax.php?action=logout"
-       class="w-full flex items-center justify-center px-3 py-2 border border-red-500 text-red-500 rounded hover:bg-red-500 hover:text-white transition text-sm font-semibold">
+       class="w-full flex items-center justify-center px-4 py-3 bg-gray-700/50 border border-yellow-600/50 text-yellow-400 rounded-lg hover:bg-yellow-600 hover:text-gray-900 hover:border-yellow-600 transition-all duration-300 text-sm font-semibold shadow-lg"
+       style="font-family: 'Montserrat', sans-serif;">
       <?php echo isset($_SESSION['login_name']) ? $_SESSION['login_name'] : 'Admin'; ?>
       <i class="fa fa-power-off ml-2"></i>
     </a>
@@ -87,7 +58,9 @@
     if(page) {
       var active = document.querySelector('.nav-' + page);
       if(active) {
-        active.classList.add('bg-green-100', 'text-green-700', 'border-l-4', 'border-green-500');
+        // <CHANGE> Updated active state with premium gold styling
+        active.classList.add('bg-yellow-600/20', 'text-yellow-400', 'border-l-4', 'border-yellow-500', 'shadow-lg');
+        active.classList.remove('text-gray-300');
       }
     }
   });

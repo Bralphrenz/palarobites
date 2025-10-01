@@ -347,5 +347,89 @@ if ($action == 'delete_cart') {
     exit();
 }
 
+if(isset($_GET['action'])) {
+    $action = $_GET['action'];
+    switch($action) {
+        // 🔴 existing cases (cart, products, etc.)
+        
+        // ✅ NEW: send message
+        case 'send_message':
+            if(!isset($_SESSION['user_id'])){
+                echo json_encode(["success"=>false,"error"=>"Not logged in"]);
+                exit;
+            }
+            $user_id = $_SESSION['user_id'];
+            $message = trim($_POST['message'] ?? '');
+            if($message === ''){
+                echo json_encode(["success"=>false,"error"=>"Empty message"]);
+                exit;
+            }
+
+            // check role
+            $roleQ = $conn->prepare("SELECT role FROM user_info WHERE user_id=?");
+            $roleQ->bind_param("i", $user_id);
+            $roleQ->execute();
+            $roleRes = $roleQ->get_result()->fetch_assoc();
+            $role = $roleRes['role'] ?? 'user';
+
+            if($role === 'admin'){
+                $receiver_id = intval($_POST['receiver_id'] ?? 0);
+                if($receiver_id <= 0){
+                    echo json_encode(["success"=>false,"error"=>"No user selected"]);
+                    exit;
+                }
+            } else {
+                $receiver_id = 3; // admin id
+            }
+
+            $stmt = $conn->prepare("INSERT INTO messages (sender_id, receiver_id, message) VALUES (?, ?, ?)");
+            $stmt->bind_param("iis", $user_id, $receiver_id, $message);
+            $stmt->execute();
+
+            echo json_encode(["success"=>true]);
+            break;
+
+        // ✅ NEW: fetch messages
+        case 'fetch_messages':
+            if(!isset($_SESSION['user_id'])){
+                echo json_encode(["success"=>false]);
+                exit;
+            }
+            $user_id = $_SESSION['user_id'];
+
+            // get role
+            $roleQ = $conn->prepare("SELECT role FROM user_info WHERE user_id=?");
+            $roleQ->bind_param("i", $user_id);
+            $roleQ->execute();
+            $roleRes = $roleQ->get_result()->fetch_assoc();
+            $role = $roleRes['role'] ?? 'user';
+
+            if($role === 'admin'){
+                $partner_id = intval($_GET['user_id'] ?? 0);
+                if($partner_id <= 0){
+                    echo json_encode(["success"=>false,"error"=>"No user selected"]);
+                    exit;
+                }
+            } else {
+                $partner_id = 3; // admin id
+            }
+
+            $q = $conn->prepare("SELECT * FROM messages 
+                                WHERE (sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?) 
+                                ORDER BY created_at ASC");
+            $q->bind_param("iiii", $user_id, $partner_id, $partner_id, $user_id);
+            $q->execute();
+            $res = $q->get_result();
+
+            $messages = [];
+            while($row = $res->fetch_assoc()){
+                $messages[] = $row;
+            }
+
+            echo json_encode(["success"=>true,"messages"=>$messages]);
+            break;
+    }
+}
+
 $conn->close();
 

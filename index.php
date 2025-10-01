@@ -351,6 +351,227 @@ if (isset($_SESSION['user_id'])) {
       margin: 3rem 0;
     }
 
+    /* <CHANGE> Updated chat button styling to match premium design */
+    #chatButton {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      background: var(--color-primary);
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      z-index: 40;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid var(--color-secondary);
+      font-size: 1.5rem;
+    }
+
+    #chatButton:hover {
+      background: var(--color-secondary);
+      color: var(--color-primary);
+      transform: scale(1.1);
+      box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    /* <CHANGE> Redesigned chat modal to match premium aesthetic */
+    #chatModal {
+      position: fixed;
+      bottom: 6rem;
+      right: 1.5rem;
+      width: 24rem;
+      max-width: calc(100vw - 3rem);
+      max-height: 70vh;
+      background: #ffffff;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      border: 2px solid var(--color-secondary);
+      display: flex;
+      flex-direction: column;
+      z-index: 40;
+      overflow: hidden;
+      animation: chatSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes chatSlide {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    #chatModal.hidden {
+      display: none;
+    }
+
+    /* <CHANGE> Updated chat header styling */
+    #chatModal .chat-header {
+      background: var(--color-primary);
+      color: #ffffff;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--color-secondary);
+    }
+
+    #chatModal .chat-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.5px;
+    }
+
+    #chatModal .chat-header button {
+      color: #ffffff;
+      font-size: 1.75rem;
+      line-height: 1;
+      transition: all 0.3s ease;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    #chatModal .chat-header button:hover {
+      background: var(--color-secondary);
+      color: var(--color-primary);
+      transform: rotate(90deg);
+    }
+
+    /* <CHANGE> Improved chat messages area styling */
+    #chatMessages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.25rem;
+      background: var(--color-light);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    #chatMessages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #chatMessages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #chatMessages::-webkit-scrollbar-thumb {
+      background: var(--color-muted);
+      border-radius: 3px;
+    }
+
+    #chatMessages::-webkit-scrollbar-thumb:hover {
+      background: var(--color-secondary);
+    }
+
+    #chatMessages .empty-state {
+      color: var(--color-muted);
+      text-align: center;
+      font-size: 0.875rem;
+      margin: auto;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* <CHANGE> Enhanced message bubble styling */
+    #chatMessages .message-bubble {
+      display: inline-block;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+      max-width: 80%;
+      word-wrap: break-word;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      font-family: 'Montserrat', sans-serif;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #chatMessages .message-right .message-bubble {
+      background: var(--color-primary);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+
+    #chatMessages .message-left .message-bubble {
+      background: #ffffff;
+      color: var(--color-primary);
+      border: 1px solid var(--color-secondary);
+      border-bottom-left-radius: 4px;
+    }
+
+    /* <CHANGE> Refined chat input area */
+    #chatModal .chat-input-area {
+      padding: 1rem;
+      border-top: 2px solid var(--color-secondary);
+      background: #ffffff;
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    #chatModal .chat-input-area input {
+      flex: 1;
+      border: 2px solid var(--color-primary);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-family: 'Montserrat', sans-serif;
+      outline: none;
+      transition: all 0.3s ease;
+      background: var(--color-light);
+      color: var(--color-primary);
+    }
+
+    #chatModal .chat-input-area input:focus {
+      border-color: var(--color-secondary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+
+    #chatModal .chat-input-area input::placeholder {
+      color: var(--color-muted);
+    }
+
+    #chatModal .chat-input-area button {
+      background: var(--color-primary);
+      color: #ffffff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      border: 2px solid var(--color-primary);
+      font-weight: 500;
+      font-size: 0.875rem;
+      font-family: 'Montserrat', sans-serif;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    #chatModal .chat-input-area button:hover {
+      background: var(--color-secondary);
+      border-color: var(--color-secondary);
+      color: var(--color-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+
     @media (max-width: 768px) {
       .hero-section {
         height: 400px;
@@ -362,6 +583,20 @@ if (isset($_SESSION['user_id'])) {
       
       #categoryModal .product-title {
         font-size: 1.25rem;
+      }
+
+      #chatButton {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.25rem;
+        bottom: 1rem;
+        right: 1rem;
+      }
+
+      #chatModal {
+        width: calc(100vw - 2rem);
+        right: 1rem;
+        bottom: 5rem;
       }
     }
   </style>
@@ -490,6 +725,30 @@ if (isset($_SESSION['user_id'])) {
       </div>
     </section>
   </main>
+
+   <CHANGE> Redesigned chat button with premium styling 
+  <div id="chatButton">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+  </div>
+
+   <CHANGE> Redesigned chat modal with premium aesthetic 
+  <div id="chatModal" class="hidden">
+    <div class="chat-header">
+      <h2>Messages</h2>
+      <button id="closeChat">&times;</button>
+    </div>
+
+    <div id="chatMessages">
+      <div class="empty-state">Start chatting with admin...</div>
+    </div>
+
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Type a message...">
+      <button id="sendMessage">Send</button>
+    </div>
+  </div>
 
   <div id="categoryModal" class="fixed inset-0 flex items-center justify-center hidden fade-in p-4">
     <div class="modal-content w-full max-w-6xl relative">
@@ -679,6 +938,58 @@ if (isset($_SESSION['user_id'])) {
         });
       }
     });
+
+    // <CHANGE> Updated chat functionality with improved message styling
+    $(document).ready(function () {
+      $("#chatButton").click(() => $("#chatModal").toggleClass("hidden"));
+      $("#closeChat").click(() => $("#chatModal").addClass("hidden"));
+
+      $("#sendMessage").click(function () {
+        let msg = $("#chatInput").val().trim();
+        if (msg === "") return;
+
+        $.post("admin/ajax.php?action=send_message", { message: msg }, function (res) {
+          if (res.success) {
+            $("#chatMessages").append(
+              `<div class="message-right"><div class="message-bubble">${msg}</div></div>`
+            );
+            $("#chatInput").val("");
+            $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
+          } else {
+            alert(res.error || "Error sending message.");
+          }
+        }, "json");
+      });
+
+      // Allow Enter key to send message
+      $("#chatInput").keypress(function(e) {
+        if (e.which === 13) {
+          $("#sendMessage").click();
+        }
+      });
+
+      function fetchMessages() {
+        $.get("admin/ajax.php?action=fetch_messages", function (res) {
+          if (res.success) {
+            $("#chatMessages").html("");
+            if (res.messages.length === 0) {
+              $("#chatMessages").html('<div class="empty-state">Start chatting with admin...</div>');
+            } else {
+              res.messages.forEach(m => {
+                let side = (m.sender_id == <?php echo $_SESSION['user_id'] ?? 0; ?>) ? "message-right" : "message-left";
+                $("#chatMessages").append(
+                  `<div class="${side}"><div class="message-bubble">${m.message}</div></div>`
+                );
+              });
+            }
+            $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
+          }
+        }, "json");
+      }
+
+      setInterval(fetchMessages, 5000);
+      fetchMessages();
+    });
   </script>
 </body>
-</html>
+</html> 
