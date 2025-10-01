@@ -8,14 +8,330 @@ session_start();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shopping Cart</title>
+  <title>Shopping Cart - Programmers Guild</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Added Google Fonts for better typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* Enhanced design system with refined colors and typography */
+    :root {
+      --primary: #1e293b;
+      --secondary: #475569;
+      --accent: #d4af37;
+      --success: #059669;
+      --danger: #dc2626;
+      --light: #f8fafc;
+      --border: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      color: var(--primary);
+    }
+
+    h1, h5 {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .page-title i {
+      color: var(--accent);
+      margin-right: 0.75rem;
+    }
+
+    /* Refined cart item cards with better shadows and borders */
+    .cart-item-card {
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+    }
+
+    .cart-item-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .cart-item-card .card-body {
+      padding: 1.5rem;
+    }
+
+    .product-image {
+      max-height: 120px;
+      border-radius: 0.75rem;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .product-name i {
+      color: var(--accent);
+      font-size: 1rem;
+      margin-right: 0.5rem;
+    }
+
+    .product-description {
+      font-size: 0.9rem;
+      color: var(--secondary);
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .price-label {
+      font-size: 0.9rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    .price-value {
+      font-weight: 600;
+      color: var(--success);
+      font-size: 1.1rem;
+    }
+
+    /* Enhanced quantity controls with better styling */
+    .qty-controls {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      background: white;
+    }
+
+    .qty-controls button {
+      border: none;
+      background: white;
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .qty-controls button:hover {
+      background: var(--light);
+      color: var(--success);
+    }
+
+    .qty-controls input {
+      border: none;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      width: 60px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .qty-controls input:focus {
+      outline: none;
+    }
+
+    /* Refined remove button */
+    .btn-remove {
+      background: white;
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      padding: 0.5rem 1.25rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-remove:hover {
+      background: var(--danger);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
+    }
+
+    /* Enhanced order summary card */
+    .summary-card {
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 2rem;
+    }
+
+    .summary-card .card-body {
+      padding: 2rem;
+    }
+
+    .summary-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-title i {
+      color: var(--accent);
+      margin-right: 0.5rem;
+    }
+
+    .summary-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--secondary);
+      line-height: 1.8;
+    }
+
+    .summary-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-list li:last-child {
+      border-bottom: none;
+    }
+
+    .summary-divider {
+      border: none;
+      border-top: 2px solid var(--border);
+      margin: 1.5rem 0;
+    }
+
+    .total-amount {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: right;
+      margin: 1.5rem 0;
+    }
+
+    .total-amount span {
+      color: var(--success);
+    }
+
+    /* Enhanced checkout button */
+    .btn-checkout {
+      background: linear-gradient(135deg, var(--success) 0%, #047857 100%);
+      border: none;
+      color: white;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+
+    .btn-checkout:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+    }
+
+    .btn-checkout i {
+      margin-right: 0.5rem;
+    }
+
+    /* Enhanced back to store button */
+    .btn-back {
+      background: white;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      padding: 0.875rem 2rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-back:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2);
+    }
+
+    .btn-back i {
+      margin-right: 0.5rem;
+    }
+
+    /* Enhanced alert messages */
+    .alert-custom {
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--secondary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .alert-custom a {
+      color: var(--success);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .alert-custom a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2rem;
+      }
+
+      .cart-item-card .card-body {
+        padding: 1rem;
+      }
+
+      .product-image {
+        max-height: 100px;
+        margin-bottom: 1rem;
+      }
+
+      .summary-card {
+        position: static;
+        margin-top: 2rem;
+      }
+    }
+  </style>
 </head>
-<body style="background: linear-gradient(135deg, #e0f7fa 0%, #f1f8e9 100%); min-height: 100vh;">
+<body>
   <div class="container py-5">
-    <h1 class="text-center mb-4 fw-bold text-success" style="letter-spacing:2px;">
-      <i class="fas fa-shopping-cart me-2"></i>Shopping Cart
+    <h1 class="page-title">
+      <i class="fas fa-shopping-cart"></i>Shopping Cart
     </h1>
     <div class="row g-4">
       <div class="col-lg-8">
@@ -30,27 +346,28 @@ session_start();
               $total += $item['qty'] * $item['price'];
               $order_summary .= '<li>' . $item['name'] . ' (' . $item['qty'] . 'x) - ' . $item['description'] . '</li>';
         ?>
-        <div class="card mb-3 shadow-lg border-0" style="background:rgba(255,255,255,0.85); border-radius:1.5rem;">
+        <!-- Updated card structure with new classes -->
+        <div class="cart-item-card">
           <div class="card-body">
             <div class="row align-items-center">
               <div class="col-md-3 text-center">
-                <img src="assets/img/<?php echo $item['img_path']; ?>" alt="<?php echo $item['name']; ?>" class="img-fluid rounded shadow" style="max-height: 120px; border-radius:1rem;">
+                <img src="assets/img/<?php echo $item['img_path']; ?>" alt="<?php echo $item['name']; ?>" class="img-fluid product-image">
               </div>
               <div class="col-md-5">
-                <h5 class="fw-bold text-success mb-1">
-                  <i class="fas fa-utensils me-1"></i><?php echo $item['name']; ?>
+                <h5 class="product-name">
+                  <i class="fas fa-utensils"></i><?php echo $item['name']; ?>
                 </h5>
-                <p class="mb-1 text-muted" style="font-size:0.95em;"><?php echo $item['description']; ?></p>
-                <p class="mb-2">Price: <span class="fw-semibold text-primary">₱<?php echo number_format($item['price'], 2); ?></span></p>
-                <div class="input-group input-group-sm w-75">
-                  <button class="btn btn-outline-success qty-minus" data-id="<?php echo $item['id']; ?>"><i class="fas fa-minus"></i></button>
-                  <input type="number" class="form-control text-center bg-white" value="<?php echo $item['qty']; ?>" readonly>
-                  <button class="btn btn-outline-success qty-plus" data-id="<?php echo $item['id']; ?>"><i class="fas fa-plus"></i></button>
+                <p class="product-description"><?php echo $item['description']; ?></p>
+                <p class="price-label mb-3">Price: <span class="price-value">₱<?php echo number_format($item['price'], 2); ?></span></p>
+                <div class="qty-controls">
+                  <button class="qty-minus" data-id="<?php echo $item['id']; ?>"><i class="fas fa-minus"></i></button>
+                  <input type="number" value="<?php echo $item['qty']; ?>" readonly>
+                  <button class="qty-plus" data-id="<?php echo $item['id']; ?>"><i class="fas fa-plus"></i></button>
                 </div>
               </div>
               <div class="col-md-4 text-end">
-                <p class="mb-2">Total: <span class="fw-bold text-success">₱<?php echo number_format($item['qty'] * $item['price'], 2); ?></span></p>
-                <button class="btn btn-danger btn-sm remove-item" data-id="<?php echo $item['id']; ?>">
+                <p class="price-label mb-3">Total: <span class="price-value" style="font-size: 1.25rem;">₱<?php echo number_format($item['qty'] * $item['price'], 2); ?></span></p>
+                <button class="btn-remove remove-item" data-id="<?php echo $item['id']; ?>">
                   <i class="fas fa-trash-alt"></i> Remove
                 </button>
               </div>
@@ -58,32 +375,33 @@ session_start();
           </div>
         </div>
         <?php endwhile; else: ?>
-        <div class="alert alert-warning text-center shadow-sm rounded-3">Your cart is empty. <a href="index.php" class="text-success fw-bold">Continue shopping</a>.</div>
+        <div class="alert-custom">Your cart is empty. <a href="index.php">Continue shopping</a>.</div>
         <?php endif; ?>
         <?php } else { ?>
-        <div class="alert alert-warning text-center shadow-sm rounded-3">Please <a href="login.php" class="text-success fw-bold">log in</a> to view your cart.</div>
+        <div class="alert-custom">Please <a href="login.php">log in</a> to view your cart.</div>
         <?php } ?>
       </div>
       <div class="col-lg-4">
-        <div class="card shadow-lg border-0" style="background:rgba(255,255,255,0.93); border-radius:1.5rem;">
+        <!-- Updated summary card with new classes -->
+        <div class="summary-card">
           <div class="card-body">
-            <h5 class="fw-bold text-success mb-3"><i class="fas fa-receipt me-2"></i>Order Summary</h5>
-            <hr>
-            <ul class="mb-2" style="font-size:0.97em;">
+            <h5 class="summary-title"><i class="fas fa-receipt"></i>Order Summary</h5>
+            <hr class="summary-divider">
+            <ul class="summary-list">
               <?php echo $order_summary; ?>
             </ul>
-            <hr>
-            <p class="text-end fs-5 fw-bold">Total: <span class="text-success">₱<?php echo number_format($total, 2); ?></span></p>
-            <button class="btn btn-success btn-lg w-100 shadow" id="checkout">
-              <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+            <hr class="summary-divider">
+            <p class="total-amount">Total: <span>₱<?php echo number_format($total, 2); ?></span></p>
+            <button class="btn-checkout" id="checkout">
+              <i class="fas fa-credit-card"></i>Proceed to Checkout
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="text-center mt-4">
-      <a href="index.php" class="btn btn-primary btn-lg shadow"><i class="fas fa-store me-2"></i>Back to Store</a>
+    <div class="text-center mt-5">
+      <a href="index.php" class="btn-back"><i class="fas fa-store"></i>Back to Store</a>
     </div>
   </div>
 

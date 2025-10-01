@@ -133,6 +133,11 @@ if (isset($_SESSION['user_id'])) {
       transform: scale(1.1);
     }
 
+    .category-card > div {
+      position: relative;
+      z-index: 2;
+    }
+
     .category-card .badge {
       position: absolute;
       top: 1rem;
@@ -402,6 +407,12 @@ if (isset($_SESSION['user_id'])) {
                   </svg>
                   Profile
                 </a>
+                <a href="vieworder.php" class="flex items-center gap-3 px-4 py-3 transition-all duration-300" style="color: var(--color-dark);" onmouseover="this.style.background='var(--color-light)'" onmouseout="this.style.background='transparent'">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  View Order
+                </a>
                 <a href="logout.php" class="flex items-center gap-3 px-4 py-3 border-t transition-all duration-300" style="color: var(--color-dark); border-color: var(--color-light);" onmouseover="this.style.background='var(--color-light)'" onmouseout="this.style.background='transparent'">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1"/>
@@ -416,6 +427,12 @@ if (isset($_SESSION['user_id'])) {
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
               </svg>
               <span class="hidden sm:inline">Log in</span>
+            </a>
+            <a href="register.php" class="flex items-center gap-2 px-4 sm:px-6 py-2.5 font-medium border-2 transition-all duration-300 hover:scale-105 text-sm sm:text-base" style="background: white; color: var(--color-primary); border-color: var(--color-primary);">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+              </svg>
+              <span class="hidden sm:inline">Sign in</span>
             </a>
           <?php endif; ?>
         </div>

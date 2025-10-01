@@ -17,8 +17,7 @@ session_start();
     .status-pending { background: #fff3cd; color: #856404; }
     .status-confirmed { background: #d4edda; color: #155724; }
     .status-delivery { background: #cce5ff; color: #004085; }
-    .status-delivered { background: #fff3cd; color: #856404;; }
-
+    .status-delivered { background: #e2f0cb; color: #155724; }
   </style>
 </head>
 <body>
@@ -33,6 +32,7 @@ session_start();
       $orders = $conn->query("SELECT * FROM orders WHERE email IN (SELECT email FROM user_info WHERE user_id = '$user_id') ORDER BY id DESC");
 
       if ($orders && $orders->num_rows > 0):
+        $counter = 1; // Order number counter
         while ($order = $orders->fetch_assoc()):
           $status_class = "status-pending";
           $status_text  = "For Verification";
@@ -41,17 +41,20 @@ session_start();
           if ($order['status'] == 3) { $status_class = "status-delivered"; $status_text = "Delivered"; }
 
           // fetch items in this order
-          $items = $conn->query("SELECT ol.*, p.name, p.description, p.price, p.img_path 
-                                 FROM order_list ol
-                                 JOIN product_list p ON ol.product_id = p.id
-                                 WHERE ol.order_id = '{$order['id']}'");
+          $order_id = (int)$order['id'];
+          $items = $conn->query("
+            SELECT ol.*, p.name, p.description, p.price, p.img_path 
+            FROM order_list ol
+            JOIN product_list p ON ol.product_id = p.id
+            WHERE ol.order_id = $order_id
+          ");
 
           $total = 0;
     ?>
       <div class="order-card p-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
-            <h5 class="mb-1">Order #<?php echo $order['id']; ?></h5>
+            <h5 class="mb-1">Order #<?php echo $counter; ?></h5>
             <small class="text-muted">Placed on: <?php echo date("M d, Y h:i A", strtotime($order['date_created'])); ?></small>
           </div>
           <div>
@@ -66,12 +69,12 @@ session_start();
           ?>
           <div class="row mb-3 border rounded p-2">
             <div class="col-md-2 text-center">
-              <img src="assets/img/<?php echo $item['img_path']; ?>" alt="<?php echo $item['name']; ?>" 
+              <img src="assets/img/<?php echo $item['img_path']; ?>" alt="<?php echo htmlspecialchars($item['name']); ?>" 
                    class="img-fluid rounded" style="max-height:100px;">
             </div>
             <div class="col-md-6">
-              <h6><?php echo $item['name']; ?></h6>
-              <p class="text-muted mb-1" style="font-size:0.9rem;"><?php echo $item['description']; ?></p>
+              <h6><?php echo htmlspecialchars($item['name']); ?></h6>
+              <p class="text-muted mb-1" style="font-size:0.9rem;"><?php echo htmlspecialchars($item['description']); ?></p>
               <p class="fw-semibold">₱<?php echo number_format($item['price'], 2); ?> × <?php echo $item['qty']; ?></p>
             </div>
             <div class="col-md-4 text-end">
@@ -84,16 +87,20 @@ session_start();
           <p class="text-muted">No items found in this order.</p>
         <?php endif; ?>
       </div>
-    <?php endwhile; else: ?>
+    <?php 
+        $counter++; // increment for next order
+        endwhile; 
+      else: ?>
       <div class="alert alert-info">You have no orders yet.</div>
     <?php endif; ?>
     <?php } else { ?>
       <div class="alert alert-warning">Please <a href="login.php">login</a> to view your orders.</div>
     <?php } ?>
   </div>
-      <div class="text-center mt-4">
-      <a href="index.php" class="btn btn-primary btn-lg shadow"><i class="fas fa-store me-2"></i>Back to Store</a>
-    </div>
+
+  <div class="text-center mt-4">
+    <a href="index.php" class="btn btn-primary btn-lg shadow"><i class="fas fa-store me-2"></i>Back to Store</a>
+  </div>
 </body>
 </html>
 
