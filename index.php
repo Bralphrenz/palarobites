@@ -5,9 +5,10 @@ require 'admin/db_connect.php';
 $user_firstname = 'User';
 if (isset($_SESSION['user_id'])) {
     $uid = $_SESSION['user_id'];
-    $result = $conn->query("SELECT first_name FROM user_info WHERE user_id = $uid LIMIT 1");
+    $result = $conn->query("SELECT first_name, last_name FROM user_info WHERE user_id = $uid LIMIT 1");
     if ($result && $row = $result->fetch_assoc()) {
         $user_firstname = htmlspecialchars($row['first_name']);
+        $user_lastname = htmlspecialchars($row['last_name']);
     }
 }
 ?>
@@ -26,6 +27,8 @@ if (isset($_SESSION['user_id'])) {
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="js/alert.js"></script>
   <style>
     * {
       margin: 0;
@@ -741,17 +744,14 @@ if (isset($_SESSION['user_id'])) {
           <span></span>
           <span></span>
         </button>
-        <!-- Remove desktop-nav, all navigation is now in hamburger/mobile menu -->
       </div>
     </header>
-
-    <!-- Mobile menu overlay and slide-out menu -->
     <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
     <nav class="mobile-menu" id="mobileMenu">
       <?php if (isset($_SESSION['user_id'])): ?>
         <div class="mobile-user-info">
           <div class="user-label">Signed in as</div>
-          <div class="user-name"><?php echo htmlspecialchars($user_firstname); ?></div>
+          <div class="user-name"><?php echo htmlspecialchars($user_firstname); ?> <?php echo htmlspecialchars($user_lastname); ?></div>
         </div>
       <?php endif; ?>
       
@@ -1093,17 +1093,14 @@ if (isset($_SESSION['user_id'])) {
       let msg = $("#chatInput").val().trim();
       if (msg === "") return;
 
-      $.post("admin/ajax.php?action=send_message", { message: msg }, function (res) {
-        if (res.success) {
-          $("#chatMessages").append(
-            `<div class="flex justify-end"><div class="message-bubble message-right">${escapeHtml(msg)}</div></div>`
-          );
-          $("#chatInput").val("");
-          $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
-        } else {
-          alert(res.error || "Error sending message.");
-        }
-      }, "json");
+      sendMessageWithAlert(msg); // Use your SweetAlert2 helper
+
+      // Optionally, update the chat UI after sending
+      $("#chatMessages").append(
+        `<div class="flex justify-end"><div class="message-bubble message-right">${escapeHtml(msg)}</div></div>`
+      );
+      $("#chatInput").val("");
+      $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
     });
 
     $("#chatInput").keypress(function(e) {
@@ -1112,29 +1109,67 @@ if (isset($_SESSION['user_id'])) {
       }
     });
 
-    function fetchMessages() {
-      $.get("admin/ajax.php?action=fetch_messages", function (res) {
-        if (res.success) {
-          $("#chatMessages").html("");
-          if (res.messages.length === 0) {
-            $("#chatMessages").html('<div class="empty-state">Start chatting with admin...</div>');
-          } else {
-            res.messages.forEach(m => {
-              let isMine = (m.sender_id == <?php echo json_encode($_SESSION['user_id'] ?? 0); ?>);
-              let sideClass = isMine ? "justify-end" : "justify-start";
-              let bubbleClass = isMine ? "message-right" : "message-left";
-              
-              $("#chatMessages").append(
-                `<div class="flex ${sideClass}">
-                  <div class="message-bubble ${bubbleClass}">${escapeHtml(m.message)}</div>
-                </div>`
-              );
-            });
-          }
-          $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
+    let lastMessageId = null;
+
+function fetchMessages() {
+  $.get("admin/ajax.php?action=fetch_messages", function (res) {
+    if (res.success) {
+      let currentUserId = <?php echo json_encode($_SESSION['user_id'] ?? 0); ?>;
+      let messages = res.messages;
+      $("#chatMessages").html("");
+      if (messages.length === 0) {
+        $("#chatMessages").html('<div class="empty-state">Start chatting with admin...</div>');
+      } else {
+        messages.forEach(m => {
+          let isMine = (m.sender_id == currentUserId);
+          let sideClass = isMine ? "justify-end" : "justify-start";
+          let bubbleClass = isMine ? "message-right" : "message-left";
+          $("#chatMessages").append(
+            `<div class="flex ${sideClass}">
+              <div class="message-bubble ${bubbleClass}">${escapeHtml(m.message)}</div>
+            </div>`
+          );
+        });
+
+        // SweetAlert2 for new incoming message
+        let lastMsg = messages[messages.length - 1];
+        if (
+          lastMessageId !== null &&
+          lastMsg.id != lastMessageId &&
+          lastMsg.sender_id != currentUserId
+        ) {
+          Swal.fire({
+            icon: 'info',
+            title: '📩 New Message!',
+            html: `<div style="font-size:1.2rem;color:#222;margin-bottom:8px;">${escapeHtml(lastMsg.message)}</div>
+                   <div style="margin-top:10px;">
+                     <span style="background:#d4af37;color:#111;padding:4px 12px;border-radius:16px;font-size:0.95rem;font-weight:600;letter-spacing:1px;">
+                       Real-time Chat
+                     </span>
+                   </div>`,
+            background: 'linear-gradient(135deg, #fffbe6 0%, #e0e7ff 100%)',
+            showConfirmButton: true,
+            confirmButtonColor: '#000',
+            confirmButtonText: 'Reply Now',
+            customClass: {
+              popup: 'swal2-new-message-popup'
+            },
+            timer: 4000,
+            timerProgressBar: true,
+            position: 'top-end',
+            toast: true,
+            didOpen: (toast) => {
+              toast.querySelector('.swal2-title').style.fontFamily = "'Montserrat',sans-serif";
+              toast.querySelector('.swal2-title').style.fontWeight = "700";
+            }
+          });
         }
-      }, "json");
+        lastMessageId = lastMsg.id;
+      }
+      $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
     }
+  }, "json");
+}
 
     function escapeHtml(text) {
       var map = {

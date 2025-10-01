@@ -1,13 +1,13 @@
 <?php require_once('./db_connect.php'); ?>
 <style>
-	.custom-menu {
+    .custom-menu {
         z-index: 1000;
-	    position: absolute;
-	    background-color: #ffffff;
-	    border: 1px solid #0000001c;
-	    border-radius: 5px;
-	    padding: 8px;
-	    min-width: 13vw;
+        position: absolute;
+        background-color: #ffffff;
+        border: 1px solid #0000001c;
+        border-radius: 5px;
+        padding: 8px;
+        min-width: 13vw;
 }
 a.custom-menu-list {
     width: 100%;
@@ -17,24 +17,24 @@ a.custom-menu-list {
     font-size: 1em;
     padding: 1px 11px;
 }
-	span.card-icon {
+    span.card-icon {
     position: absolute;
     font-size: 3em;
     bottom: .2em;
     color: #ffffff80;
 }
 .file-item{
-	cursor: pointer;
+    cursor: pointer;
 }
 a.custom-menu-list:hover,.file-item:hover,.file-item.active {
     background: #80808024;
 }
 table th,td{
-	border-left:1px solid gray;
+    border-left:1px solid gray;
 }
 a.custom-menu-list span.icon{
-		width:1em;
-		margin-right: 5px
+        width:1em;
+        margin-right: 5px
 }
 .candidate {
     margin: auto;
@@ -53,19 +53,19 @@ a.custom-menu-list span.icon{
     margin-right: 3em;
     width: 100%;
 }
-	.img-field {
-	    display: flex;
-	    height: 8vh;
-	    width: 4.3vw;
-	    padding: .3em;
-	    background: #80808047;
-	    border-radius: 50%;
-	    position: absolute;
-	    left: -.7em;
-	    top: -.7em;
-	}
-	
-	.candidate img {
+    .img-field {
+        display: flex;
+        height: 8vh;
+        width: 4.3vw;
+        padding: .3em;
+        background: #80808047;
+        border-radius: 50%;
+        position: absolute;
+        left: -.7em;
+        top: -.7em;
+    }
+    
+    .candidate img {
     height: 100%;
     width: 100%;
     margin: auto;
@@ -78,13 +78,13 @@ a.custom-menu-list span.icon{
 }
 </style>
 
-<div class="pl-64 pt-10 min-h-screen bg-gray-50">
-  <div class="mb-8 mt-8">
+<div class="min-h-screen bg-gray-50 md:pl-64 pt-10">
+  <div class="mb-8 mt-8 max-w-7xl mx-auto px-4">
     <h3 class="text-2xl font-bold text-gray-700">Welcome back, <?php echo !empty($_SESSION['login_name']) ? $_SESSION['login_name'] : 'Admin'; ?>!</h3>
   </div>
 
   <?php if (isset($_GET['status'])): ?>
-    <div class="mb-4">
+    <div class="mb-4 max-w-7xl mx-auto px-4">
       <span class="inline-block px-4 py-2 rounded bg-green-100 text-green-700 font-semibold">
         Showing <?php echo $_GET['status'] == '1' ? 'Active' : 'Inactive'; ?> Menus
       </span>
@@ -92,7 +92,7 @@ a.custom-menu-list span.icon{
     </div>
   <?php endif; ?>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4">
     <!-- Total Active Menu Card -->
     <a href="menu.php?status=1" class="block bg-white rounded-2xl shadow p-6 relative overflow-hidden hover:ring-2 hover:ring-green-300 transition">
       <div class="absolute right-4 top-4 text-green-200 text-4xl pointer-events-none"><i class="fas fa-utensils"></i></div>

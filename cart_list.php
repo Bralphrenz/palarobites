@@ -344,7 +344,7 @@ session_start();
           if ($cart_items->num_rows > 0):
             while ($item = $cart_items->fetch_assoc()):
               $total += $item['qty'] * $item['price'];
-              $order_summary .= '<li>' . $item['name'] . ' (' . $item['qty'] . 'x) - ' . $item['description'] . '</li>';
+              $order_summary .= '<li>' . $item['name'] . ' (' . $item['qty'] . 'x) - ' . $item['description'] . ' <span style="float:right;">₱' . number_format($item['qty'] * $item['price'], 2) . '</span></li>';
         ?>
         <!-- Updated card structure with new classes -->
         <div class="cart-item-card">
@@ -389,9 +389,14 @@ session_start();
             <hr class="summary-divider">
             <ul class="summary-list">
               <?php echo $order_summary; ?>
+              <li style="display: flex; justify-content: space-between; align-items: center;">
+                <span><strong>Delivery Fee</strong></span>
+                <span>₱5.00</span>
+              </li>
             </ul>
             <hr class="summary-divider">
-            <p class="total-amount">Total: <span>₱<?php echo number_format($total, 2); ?></span></p>
+            <?php $grand_total = $total + 5; ?>
+            <p class="total-amount">Total: <span>₱<?php echo number_format($grand_total, 2); ?></span></p>
             <button class="btn-checkout" id="checkout">
               <i class="fas fa-credit-card"></i>Proceed to Checkout
             </button>

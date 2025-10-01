@@ -22,15 +22,13 @@ $roleRes = $stmt->get_result()->fetch_assoc();
 $role = $roleRes['role'] ?? 'user';
 
 if ($role === 'admin') {
-    // Admin sending to specific user (pass receiver_id in POST)
     $receiver_id = intval($_POST['receiver_id'] ?? 0);
     if ($receiver_id <= 0) {
         echo json_encode(["success" => false, "error" => "No user selected"]);
         exit;
     }
 } else {
-    // User sending message to admin
-    $receiver_id = 3; // your admin id (bends@try.com)
+    $receiver_id = 3; // admin id
 }
 
 $stmt = $conn->prepare("INSERT INTO messages (sender_id, receiver_id, message) VALUES (?, ?, ?)");
@@ -38,3 +36,5 @@ $stmt->bind_param("iis", $user_id, $receiver_id, $message);
 $stmt->execute();
 
 echo json_encode(["success" => true]);
+
+?>

@@ -82,7 +82,8 @@ session_start();
             </div>
           </div>
           <?php endwhile; ?>
-          <div class="text-end fw-bold">Total: ₱<?php echo number_format($total, 2); ?></div>
+          <div class="text-end">Delivery Fee: <strong>₱5.00</strong></div>
+          <div class="text-end fw-bold">Total: ₱<?php echo number_format($total + 5, 2); ?></div>
         <?php else: ?>
           <p class="text-muted">No items found in this order.</p>
         <?php endif; ?>
