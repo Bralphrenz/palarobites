@@ -351,7 +351,7 @@ if (isset($_SESSION['user_id'])) {
       margin: 3rem 0;
     }
 
-    /* <CHANGE> Updated chat button styling to match premium design */
+    /* <CHANGE> Updated chat button styling */
     #chatButton {
       position: fixed;
       bottom: 1.5rem;
@@ -497,22 +497,22 @@ if (isset($_SESSION['user_id'])) {
       margin-bottom: 0.5rem;
       max-width: 80%;
       word-wrap: break-word;
-      font-size: 0.875rem;
+      font-size: 0.95rem;
       line-height: 1.5;
       font-family: 'Montserrat', sans-serif;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     }
 
-    #chatMessages .message-right .message-bubble {
+    #chatMessages .justify-end .message-bubble {
       background: var(--color-primary);
-      color: #ffffff;
+      color: #fff;
       border-bottom-right-radius: 4px;
     }
 
-    #chatMessages .message-left .message-bubble {
-      background: #ffffff;
+    #chatMessages .justify-start .message-bubble {
+      background: #fff;
       color: var(--color-primary);
-      border: 1px solid var(--color-secondary);
+      border: 1.5px solid var(--color-secondary);
       border-bottom-left-radius: 4px;
     }
 
@@ -642,9 +642,14 @@ if (isset($_SESSION['user_id'])) {
                   </svg>
                   Profile
                 </a>
-                <a href="vieworder.php" class="flex items-center gap-3 px-4 py-3 transition-all duration-300" style="color: var(--color-dark);" onmouseover="this.style.background='var(--color-light)'" onmouseout="this.style.background='transparent'">
+                <a href="vieworder.php" class="flex items-center gap-3 px-4 py-3 transition-all duration-300"
+                  style="color: var(--color-dark);" 
+                  onmouseover="this.style.background='var(--color-light)'" 
+                  onmouseout="this.style.background='transparent'">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <rect x="9" y="2" width="6" height="4" rx="1" />
+                    <rect x="4" y="6" width="16" height="16" rx="2" />
+                    <path d="M9 10h6M9 14h6" />
                   </svg>
                   View Order
                 </a>
@@ -976,9 +981,17 @@ if (isset($_SESSION['user_id'])) {
               $("#chatMessages").html('<div class="empty-state">Start chatting with admin...</div>');
             } else {
               res.messages.forEach(m => {
-                let side = (m.sender_id == <?php echo $_SESSION['user_id'] ?? 0; ?>) ? "message-right" : "message-left";
+                // Use your session user_id for comparison
+                let isMine = (m.sender_id == <?php echo json_encode($_SESSION['user_id'] ?? 0); ?>);
+                let side = isMine ? "justify-end" : "justify-start";
+                let bubble = isMine
+                  ? "bg-yellow-500 text-white"
+                  : "bg-white text-black border border-yellow-400";
+                let align = isMine ? "message-right" : "message-left";
                 $("#chatMessages").append(
-                  `<div class="${side}"><div class="message-bubble">${m.message}</div></div>`
+                  `<div class="flex ${side}">
+                    <div class="message-bubble ${bubble} ${align}">${escapeHtml(m.message)}</div>
+                  </div>`
                 );
               });
             }
@@ -987,9 +1000,14 @@ if (isset($_SESSION['user_id'])) {
         }, "json");
       }
 
+      // Helper to escape HTML
+      function escapeHtml(text) {
+        return $('<div>').text(text).html();
+      }
+
       setInterval(fetchMessages, 5000);
       fetchMessages();
     });
   </script>
 </body>
-</html> 
+</html>
