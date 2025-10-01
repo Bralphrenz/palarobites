@@ -331,7 +331,7 @@ session_start();
 <body>
   <div class="container py-5">
     <h1 class="page-title">
-      <i class="fas fa-shopping-cart"></i>Shopping Cart
+      <i class="fas fa-shopping-cart"></i>Ordering Cart
     </h1>
     <div class="row g-4">
       <div class="col-lg-8">
@@ -375,7 +375,7 @@ session_start();
           </div>
         </div>
         <?php endwhile; else: ?>
-        <div class="alert-custom">Your cart is empty. <a href="index.php">Continue shopping</a>.</div>
+        <div class="alert-custom">Your cart is empty. <a href="index.php">Continue Ordering</a>.</div>
         <?php endif; ?>
         <?php } else { ?>
         <div class="alert-custom">Please <a href="login.php">log in</a> to view your cart.</div>

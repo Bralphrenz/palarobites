@@ -55,6 +55,7 @@ if (isset($_SESSION['user_id'])) {
       letter-spacing: 0.5px;
     }
 
+    /* Cleaned up modal styles - removed redundant properties */
     #categoryModal {
       z-index: 50;
       background: rgba(26, 26, 26, 0.85);
@@ -67,7 +68,6 @@ if (isset($_SESSION['user_id'])) {
 
     #categoryModal .modal-content {
       background: #ffffff;
-      border: none;
       animation: modalSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       border-radius: 12px;
@@ -85,6 +85,7 @@ if (isset($_SESSION['user_id'])) {
       }
     }
 
+    /* Consolidated category card styles */
     .category-card {
       background: #ffffff;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -97,10 +98,7 @@ if (isset($_SESSION['user_id'])) {
     .category-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(139, 69, 19, 0.1) 100%);
       opacity: 0;
       transition: opacity 0.4s ease;
@@ -154,6 +152,7 @@ if (isset($_SESSION['user_id'])) {
       letter-spacing: 0.5px;
     }
 
+    /* Cleaned up swiper styles */
     #categoryModal .swiper-container {
       padding: 2rem 0 4rem 0;
     }
@@ -216,6 +215,7 @@ if (isset($_SESSION['user_id'])) {
       font-family: 'Cormorant Garamond', serif;
     }
 
+    /* Consolidated button styles */
     .btn-main {
       background: var(--color-primary);
       color: #ffffff;
@@ -255,6 +255,7 @@ if (isset($_SESSION['user_id'])) {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
     }
 
+    /* Cleaned up swiper navigation styles */
     #categoryModal .swiper-button-next,
     #categoryModal .swiper-button-prev {
       color: var(--color-secondary);
@@ -293,6 +294,7 @@ if (isset($_SESSION['user_id'])) {
       border-radius: 5px;
     }
 
+    /* Hero section styles */
     .hero-section {
       position: relative;
       height: 600px;
@@ -302,10 +304,7 @@ if (isset($_SESSION['user_id'])) {
     .hero-section::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: linear-gradient(135deg, rgba(26, 26, 26, 0.7) 0%, rgba(139, 69, 19, 0.5) 100%);
       z-index: 1;
     }
@@ -327,22 +326,126 @@ if (isset($_SESSION['user_id'])) {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    .fade-in {
+    /* Fixed hamburger menu - now only shows on mobile (≤768px) */
+    .hamburger-btn {
+      display: flex; /* Always show hamburger menu */
+      flex-direction: column;
+      gap: 5px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 50;
+    }
+
+    .hamburger-btn span {
+      width: 28px;
+      height: 3px;
+      background: var(--color-primary);
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .hamburger-btn.active span:nth-child(1) {
+      transform: rotate(45deg) translate(8px, 8px);
+    }
+
+    .hamburger-btn.active span:nth-child(2) {
       opacity: 0;
-      transition: opacity 0.4s ease;
     }
 
-    .fade-in.show {
+    .hamburger-btn.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    /* Mobile menu styles */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 45;
+      padding: 80px 20px 20px;
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(26, 26, 26, 0.5);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 44;
+    }
+
+    .mobile-menu-overlay.active {
       opacity: 1;
+      visibility: visible;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .mobile-menu-items {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .animate-spin {
-      display: inline-block;
-      animation: spin 1s linear infinite;
+    .mobile-menu-items a,
+    .mobile-menu-items button {
+      width: 100%;
+      padding: 14px 20px;
+      border: 2px solid var(--color-primary);
+      background: white;
+      color: var(--color-primary);
+      font-weight: 500;
+      font-family: 'Montserrat', sans-serif;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .mobile-menu-items a:hover,
+    .mobile-menu-items button:hover {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .mobile-user-info {
+      padding: 16px;
+      background: var(--color-light);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 2px solid var(--color-secondary);
+    }
+
+    .mobile-user-info .user-name {
+      font-weight: 600;
+      color: var(--color-primary);
+      margin-bottom: 4px;
+      font-size: 1.1rem;
+    }
+
+    .mobile-user-info .user-label {
+      font-size: 0.85rem;
+      color: var(--color-muted);
     }
 
     .section-divider {
@@ -351,7 +454,7 @@ if (isset($_SESSION['user_id'])) {
       margin: 3rem 0;
     }
 
-    /* <CHANGE> Updated chat button styling */
+    /* Chat button styles */
     #chatButton {
       position: fixed;
       bottom: 1.5rem;
@@ -379,7 +482,7 @@ if (isset($_SESSION['user_id'])) {
       box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4);
     }
 
-    /* <CHANGE> Redesigned chat modal to match premium aesthetic */
+    /* Chat modal styles */
     #chatModal {
       position: fixed;
       bottom: 6rem;
@@ -413,7 +516,6 @@ if (isset($_SESSION['user_id'])) {
       display: none;
     }
 
-    /* <CHANGE> Updated chat header styling */
     #chatModal .chat-header {
       background: var(--color-primary);
       color: #ffffff;
@@ -453,7 +555,6 @@ if (isset($_SESSION['user_id'])) {
       transform: rotate(90deg);
     }
 
-    /* <CHANGE> Improved chat messages area styling */
     #chatMessages {
       flex: 1;
       overflow-y: auto;
@@ -489,7 +590,6 @@ if (isset($_SESSION['user_id'])) {
       font-family: 'Montserrat', sans-serif;
     }
 
-    /* <CHANGE> Enhanced message bubble styling */
     #chatMessages .message-bubble {
       display: inline-block;
       padding: 0.75rem 1rem;
@@ -503,20 +603,19 @@ if (isset($_SESSION['user_id'])) {
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     }
 
-    #chatMessages .justify-end .message-bubble {
+    .message-right .message-bubble {
       background: var(--color-primary);
       color: #fff;
       border-bottom-right-radius: 4px;
     }
 
-    #chatMessages .justify-start .message-bubble {
+    .message-left .message-bubble {
       background: #fff;
       color: var(--color-primary);
       border: 1.5px solid var(--color-secondary);
       border-bottom-left-radius: 4px;
     }
 
-    /* <CHANGE> Refined chat input area */
     #chatModal .chat-input-area {
       padding: 1rem;
       border-top: 2px solid var(--color-secondary);
@@ -572,7 +671,34 @@ if (isset($_SESSION['user_id'])) {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
     }
 
+    .fade-in {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .fade-in.show {
+      opacity: 1;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .animate-spin {
+      display: inline-block;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Mobile responsive styles - hamburger shows, desktop nav hides */
     @media (max-width: 768px) {
+      .hamburger-btn {
+        display: flex;
+      }
+
+      .desktop-nav {
+        display: none;
+      }
+
       .hero-section {
         height: 400px;
       }
@@ -606,78 +732,74 @@ if (isset($_SESSION['user_id'])) {
     <img src="assets/img/Main.jpg" alt="Delicious Dish">
     
     <header class="premium-header absolute top-0 left-0 w-full z-20 p-4 sm:p-6">
-      <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="container mx-auto flex justify-between items-center">
         <div class="text-3xl sm:text-4xl md:text-5xl font-bold" style="font-family: 'Cormorant Garamond', serif; color: var(--color-primary);">
           Programmers Guild
         </div>
-        
-        <div class="flex items-center gap-4 sm:gap-6">
-          <a href="cart_list.php" class="relative group">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 sm:h-8 sm:w-8 transition-all duration-300 group-hover:scale-110" style="color: var(--color-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.6 8M17 13l1.6 8M9 21h6" />
-            </svg>
-            <span id="cartCount" class="absolute -top-2 -right-2 text-xs font-bold rounded-full px-2 py-1 border-2" style="background: var(--color-secondary); color: var(--color-primary); border-color: var(--color-secondary);">0</span>
-          </a>
-          
-          <?php if (isset($_SESSION['user_id'])): ?>
-            <div class="relative group">
-              <button id="userDropdownBtn" type="button" class="flex items-center gap-2 font-medium px-4 sm:px-6 py-2.5 border-2 transition-all duration-300 hover:scale-105" style="color: var(--color-primary); border-color: var(--color-primary);">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
-                <span class="hidden sm:inline">Hi, <?php echo htmlspecialchars($user_firstname); ?></span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div id="userDropdownMenu" class="absolute right-0 mt-2 w-56 bg-white border-2 py-2 z-30 hidden shadow-xl rounded-lg" style="border-color: var(--color-primary);">
-                <div class="px-4 py-3 border-b text-sm" style="border-color: var(--color-secondary); color: var(--color-muted);">
-                  <span class="block font-medium">Signed in as</span>
-                  <span class="block truncate font-semibold mt-1" style="color: var(--color-primary);"><?php echo htmlspecialchars($user_firstname); ?></span>
-                </div>
-                <a href="profile.php" class="flex items-center gap-3 px-4 py-3 transition-all duration-300" style="color: var(--color-dark);" onmouseover="this.style.background='var(--color-light)'" onmouseout="this.style.background='transparent'">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                  </svg>
-                  Profile
-                </a>
-                <a href="vieworder.php" class="flex items-center gap-3 px-4 py-3 transition-all duration-300"
-                  style="color: var(--color-dark);" 
-                  onmouseover="this.style.background='var(--color-light)'" 
-                  onmouseout="this.style.background='transparent'">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <rect x="9" y="2" width="6" height="4" rx="1" />
-                    <rect x="4" y="6" width="16" height="16" rx="2" />
-                    <path d="M9 10h6M9 14h6" />
-                  </svg>
-                  View Order
-                </a>
-                <a href="logout.php" class="flex items-center gap-3 px-4 py-3 border-t transition-all duration-300" style="color: var(--color-dark); border-color: var(--color-light);" onmouseover="this.style.background='var(--color-light)'" onmouseout="this.style.background='transparent'">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1"/>
-                  </svg>
-                  Logout
-                </a>
-              </div>
-            </div>
-          <?php else: ?>
-            <a href="login.php" class="flex items-center gap-2 px-4 sm:px-6 py-2.5 font-medium border-2 transition-all duration-300 hover:scale-105 text-sm sm:text-base" style="background: white; color: var(--color-primary); border-color: var(--color-primary);">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-              </svg>
-              <span class="hidden sm:inline">Log in</span>
-            </a>
-            <a href="register.php" class="flex items-center gap-2 px-4 sm:px-6 py-2.5 font-medium border-2 transition-all duration-300 hover:scale-105 text-sm sm:text-base" style="background: white; color: var(--color-primary); border-color: var(--color-primary);">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-              </svg>
-              <span class="hidden sm:inline">Sign in</span>
-            </a>
-          <?php endif; ?>
-        </div>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <!-- Remove desktop-nav, all navigation is now in hamburger/mobile menu -->
       </div>
     </header>
+
+    <!-- Mobile menu overlay and slide-out menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <nav class="mobile-menu" id="mobileMenu">
+      <?php if (isset($_SESSION['user_id'])): ?>
+        <div class="mobile-user-info">
+          <div class="user-label">Signed in as</div>
+          <div class="user-name"><?php echo htmlspecialchars($user_firstname); ?></div>
+        </div>
+      <?php endif; ?>
+      
+      <div class="mobile-menu-items">
+        <a href="cart_list.php">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.6 8M17 13l1.6 8M9 21h6" />
+          </svg>
+          View Cart (<span id="mobileCartCount">0</span>)
+        </a>
+        
+        <?php if (isset($_SESSION['user_id'])): ?>
+          <a href="profile.php">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            Profile
+          </a>
+          <a href="vieworder.php">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="9" y="2" width="6" height="4" rx="1" />
+              <rect x="4" y="6" width="16" height="16" rx="2" />
+              <path d="M9 10h6M9 14h6" />
+            </svg>
+            View Order
+          </a>
+          <a href="logout.php">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1"/>
+            </svg>
+            Logout
+          </a>
+        <?php else: ?>
+          <a href="login.php">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+            </svg>
+            Log in
+          </a>
+          <a href="register.php">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+            </svg>
+            Sign in
+          </a>
+        <?php endif; ?>
+      </div>
+    </nav>
 
     <div class="absolute inset-0 z-10 flex items-center justify-center text-center px-4">
       <div data-aos="fade-up" data-aos-duration="1000">
@@ -731,14 +853,14 @@ if (isset($_SESSION['user_id'])) {
     </section>
   </main>
 
-   <CHANGE> Redesigned chat button with premium styling 
+   Chat button 
   <div id="chatButton">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
     </svg>
   </div>
 
-   <CHANGE> Redesigned chat modal with premium aesthetic 
+   Chat modal 
   <div id="chatModal" class="hidden">
     <div class="chat-header">
       <h2>Messages</h2>
@@ -755,6 +877,7 @@ if (isset($_SESSION['user_id'])) {
     </div>
   </div>
 
+   Category modal 
   <div id="categoryModal" class="fixed inset-0 flex items-center justify-center hidden fade-in p-4">
     <div class="modal-content w-full max-w-6xl relative">
       <div class="flex justify-between items-center p-6 sm:p-8 border-b-2" style="background: var(--color-light); border-color: var(--color-secondary);">
@@ -768,9 +891,7 @@ if (isset($_SESSION['user_id'])) {
       <div id="modalCategoryContent" class="px-6 sm:px-10 pb-8 sm:pb-12">
         <h3 class="text-3xl sm:text-4xl font-bold my-8 text-center" style="font-family: 'Cormorant Garamond', serif; color: var(--color-primary);">Available Dishes</h3>
         <div class="swiper-container">
-          <div class="swiper-wrapper" id="categoryProducts">
-             Products will be dynamically loaded here 
-          </div>
+          <div class="swiper-wrapper" id="categoryProducts"></div>
           <div class="swiper-pagination mt-6"></div>
           <div class="swiper-button-next"></div>
           <div class="swiper-button-prev"></div>
@@ -855,7 +976,8 @@ if (isset($_SESSION['user_id'])) {
         url: 'admin/ajax.php?action=get_cart_count',
         method: 'GET',
         success: function (response) {
-          $('#cartCount').text(response); 
+          $('#cartCount').text(response);
+          $('#mobileCartCount').text(response);
         },
         error: function () {
           alert('An error occurred while updating the cart count.');
@@ -928,86 +1050,105 @@ if (isset($_SESSION['user_id'])) {
         offset: 100
       });
     });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const btn = document.getElementById('userDropdownBtn');
-      const menu = document.getElementById('userDropdownMenu');
-      if(btn && menu) {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          menu.classList.toggle('hidden');
-        });
-        document.addEventListener('click', function() {
-          menu.classList.add('hidden');
-        });
-      }
-    });
 
-    // <CHANGE> Updated chat functionality with improved message styling
-    $(document).ready(function () {
-      $("#chatButton").click(() => $("#chatModal").toggleClass("hidden"));
-      $("#closeChat").click(() => $("#chatModal").addClass("hidden"));
-
-      $("#sendMessage").click(function () {
-        let msg = $("#chatInput").val().trim();
-        if (msg === "") return;
-
-        $.post("admin/ajax.php?action=send_message", { message: msg }, function (res) {
-          if (res.success) {
-            $("#chatMessages").append(
-              `<div class="message-right"><div class="message-bubble">${msg}</div></div>`
-            );
-            $("#chatInput").val("");
-            $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
-          } else {
-            alert(res.error || "Error sending message.");
-          }
-        }, "json");
+    const userBtn = document.getElementById('userDropdownBtn');
+    const userMenu = document.getElementById('userDropdownMenu');
+    if(userBtn && userMenu) {
+      userBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        userMenu.classList.toggle('hidden');
       });
+      document.addEventListener('click', function() {
+        userMenu.classList.add('hidden');
+      });
+    }
 
-      // Allow Enter key to send message
-      $("#chatInput").keypress(function(e) {
-        if (e.which === 13) {
-          $("#sendMessage").click();
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+    function toggleMobileMenu() {
+      hamburgerBtn.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      mobileMenuOverlay.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    }
+
+    hamburgerBtn.addEventListener('click', toggleMobileMenu);
+    mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
+
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu-items a');
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (mobileMenu.classList.contains('active')) {
+          toggleMobileMenu();
         }
       });
-
-      function fetchMessages() {
-        $.get("admin/ajax.php?action=fetch_messages", function (res) {
-          if (res.success) {
-            $("#chatMessages").html("");
-            if (res.messages.length === 0) {
-              $("#chatMessages").html('<div class="empty-state">Start chatting with admin...</div>');
-            } else {
-              res.messages.forEach(m => {
-                // Use your session user_id for comparison
-                let isMine = (m.sender_id == <?php echo json_encode($_SESSION['user_id'] ?? 0); ?>);
-                let side = isMine ? "justify-end" : "justify-start";
-                let bubble = isMine
-                  ? "bg-yellow-500 text-white"
-                  : "bg-white text-black border border-yellow-400";
-                let align = isMine ? "message-right" : "message-left";
-                $("#chatMessages").append(
-                  `<div class="flex ${side}">
-                    <div class="message-bubble ${bubble} ${align}">${escapeHtml(m.message)}</div>
-                  </div>`
-                );
-              });
-            }
-            $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
-          }
-        }, "json");
-      }
-
-      // Helper to escape HTML
-      function escapeHtml(text) {
-        return $('<div>').text(text).html();
-      }
-
-      setInterval(fetchMessages, 5000);
-      fetchMessages();
     });
+
+    $("#chatButton").click(() => $("#chatModal").toggleClass("hidden"));
+    $("#closeChat").click(() => $("#chatModal").addClass("hidden"));
+
+    $("#sendMessage").click(function () {
+      let msg = $("#chatInput").val().trim();
+      if (msg === "") return;
+
+      $.post("admin/ajax.php?action=send_message", { message: msg }, function (res) {
+        if (res.success) {
+          $("#chatMessages").append(
+            `<div class="flex justify-end"><div class="message-bubble message-right">${escapeHtml(msg)}</div></div>`
+          );
+          $("#chatInput").val("");
+          $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
+        } else {
+          alert(res.error || "Error sending message.");
+        }
+      }, "json");
+    });
+
+    $("#chatInput").keypress(function(e) {
+      if (e.which === 13) {
+        $("#sendMessage").click();
+      }
+    });
+
+    function fetchMessages() {
+      $.get("admin/ajax.php?action=fetch_messages", function (res) {
+        if (res.success) {
+          $("#chatMessages").html("");
+          if (res.messages.length === 0) {
+            $("#chatMessages").html('<div class="empty-state">Start chatting with admin...</div>');
+          } else {
+            res.messages.forEach(m => {
+              let isMine = (m.sender_id == <?php echo json_encode($_SESSION['user_id'] ?? 0); ?>);
+              let sideClass = isMine ? "justify-end" : "justify-start";
+              let bubbleClass = isMine ? "message-right" : "message-left";
+              
+              $("#chatMessages").append(
+                `<div class="flex ${sideClass}">
+                  <div class="message-bubble ${bubbleClass}">${escapeHtml(m.message)}</div>
+                </div>`
+              );
+            });
+          }
+          $("#chatMessages").scrollTop($("#chatMessages")[0].scrollHeight);
+        }
+      }, "json");
+    }
+
+    function escapeHtml(text) {
+      var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    setInterval(fetchMessages, 5000);
+    fetchMessages();
   </script>
 </body>
 </html>
