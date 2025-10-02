@@ -20,6 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors[] = "Invalid email format.";
     }
 
+    if (!preg_match('/@cec\.edu\.ph$/', $email)) {
+        $errors[] = "Only @cec.edu.ph email addresses are allowed.";
+    }
+
     if ($password !== $confirm_password) {
         $errors[] = "Passwords do not match.";
     }

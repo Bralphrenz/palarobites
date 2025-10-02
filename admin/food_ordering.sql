@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 01, 2025 at 10:02 AM
--- Server version: 8.4.3
--- PHP Version: 8.3.16
+-- Generation Time: Oct 02, 2025 at 03:03 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.2.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -92,7 +92,14 @@ CREATE TABLE `messages` (
 INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `message`, `created_at`, `is_read`) VALUES
 (1, 12, 3, 'hi', '2025-10-01 09:31:20', 0),
 (2, 12, 3, 'hello', '2025-10-01 09:48:29', 0),
-(3, 12, 3, 'hi', '2025-10-01 09:53:13', 0);
+(3, 12, 3, 'hi', '2025-10-01 09:53:13', 0),
+(4, 13, 3, 'hello', '2025-10-01 10:18:19', 0),
+(5, 13, 3, 'hi', '2025-10-01 10:18:24', 0),
+(6, 13, 3, 'Can I send', '2025-10-01 10:52:03', 0),
+(7, 3, 13, 'Ye', '2025-10-01 17:05:27', 1),
+(8, 3, 13, 'Privyet', '2025-10-01 20:05:47', 1),
+(9, 13, 3, 'Da?', '2025-10-01 20:06:14', 0),
+(10, 3, 13, 'Lalalalalals', '2025-10-01 21:02:54', 1);
 
 -- --------------------------------------------------------
 
@@ -118,7 +125,8 @@ INSERT INTO `orders` (`id`, `name`, `address`, `mobile`, `email`, `status`, `dat
 (1, 'ligma ligmus', 'Chelyabinsk, Russia', '0765432198', 'ligma@diddy.net', 0, '2025-09-29 19:12:29'),
 (2, 'ligma ligmus', 'Chelyabinsk, Russia', '0765432198', 'ligma@diddy.net', 0, '2025-09-29 19:13:16'),
 (3, 'jay ann', 'here', '1234567890', 'joemarieebarat123@gmail.com', 0, '2025-09-30 18:15:21'),
-(4, 'jay ann', 'here', '1234567890', 'joemarieebarat123@gmail.com', 0, '2025-09-30 18:15:48');
+(4, 'jay ann', 'here', '1234567890', 'joemarieebarat123@gmail.com', 0, '2025-09-30 18:15:48'),
+(5, 'Jon Diddy', 'Ligma Street', '0765432198', 'diddy@kremlin.com', 1, '2025-10-01 17:57:46');
 
 -- --------------------------------------------------------
 
@@ -145,7 +153,8 @@ INSERT INTO `order_list` (`id`, `order_id`, `product_id`, `qty`, `date_created`)
 (4, 3, 2, 1, '2025-09-30 18:15:21'),
 (5, 3, 1, 1, '2025-09-30 18:15:21'),
 (6, 4, 18, 1, '2025-09-30 18:15:48'),
-(7, 4, 19, 1, '2025-09-30 18:15:48');
+(7, 4, 19, 1, '2025-09-30 18:15:48'),
+(8, 5, 1, 4, '2025-10-01 17:57:46');
 
 -- --------------------------------------------------------
 
@@ -159,6 +168,7 @@ CREATE TABLE `product_list` (
   `name` varchar(100) NOT NULL,
   `description` text NOT NULL,
   `price` float NOT NULL DEFAULT '0',
+  `quantity` int NOT NULL DEFAULT '0',
   `img_path` text NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0= unavailable, 2 Available',
   `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -168,30 +178,29 @@ CREATE TABLE `product_list` (
 -- Dumping data for table `product_list`
 --
 
-INSERT INTO `product_list` (`id`, `category_id`, `name`, `description`, `price`, `img_path`, `status`, `date_created`) VALUES
-(1, 7, 'Pepperoni Pizza', 'Wow', 250, '1747872610_1746950819_Pepperoni Pizza.jpg', 1, '2025-05-19 12:37:56'),
-(2, 7, 'Margherita Pizza', 'Wow2', 250, '1747872961_1746951248_Margherita Pizza.jpg', 1, '2025-05-19 12:37:56'),
-(3, 9, 'Fried Chicken', 'Crispy', 150, '1746951972_1746945480_Chicken.jpg', 1, '2025-05-19 12:37:56'),
-(4, 9, 'Grilled chicken', 'Yammy', 240, '1746952134_Grilled chicken.jpg', 1, '2025-05-19 12:37:56'),
-(5, 7, 'Hawaiian Pizza', 'Mmm', 250, '1746952916_Hawaiian Pizza.jpg', 1, '2025-05-19 12:37:56'),
-(6, 7, 'Veggie Pizza', 'Ulala', 250, '1746952926_Veggie Pizza.jpg', 1, '2025-05-19 12:37:56'),
-(7, 9, ' Chicken curry', 'Damn', 280, '1746953847_Chicken curry.jpg', 1, '2025-05-19 12:37:56'),
-(8, 9, 'Roasted chicken', 'Damnnn', 280, '1746953890_Roasted chicken.jpg', 1, '2025-05-19 12:37:56'),
-(9, 10, 'Cheeseburger', 'Burger withCheese', 70, '1747116237_Cheeseburger.jpg', 1, '2025-05-19 12:37:56'),
-(10, 10, 'Chicken burger', 'Burger with Chicken', 70, '1747116284_Chicken burger.jpg', 1, '2025-05-19 12:37:56'),
-(11, 10, 'Hamburger', 'Burger With Ham', 70, '1747116311_Hamburger.jpg', 1, '2025-05-19 12:37:56'),
-(12, 10, 'Veggie burger', 'Burger with Veggie', 70, '1747116346_Veggie burger.jpg', 1, '2025-05-19 12:37:56'),
-(13, 11, 'Carrot Cake', 'cake with carrot', 150, '1747117276_carrot.jpg', 1, '2025-05-19 12:37:56'),
-(14, 11, 'Chocolate Cake', 'cake with chocolate', 150, '1747117339_chlate.jpg', 1, '2025-05-19 12:37:56'),
-(15, 11, 'Lava cake', 'chocolate vanilla', 180, '1747117449_lava.jpg', 1, '2025-05-19 12:37:56'),
-(16, 11, 'Strawberry Cake', 'cake with strawberry flavor', 200, '1747117501_strberry.jpg', 1, '2025-05-19 12:37:56'),
-(17, 12, 'Black Coffee', 'Greatest black caramel', 60, '1747117937_black.jpg', 1, '2025-05-19 12:37:56'),
-(18, 12, 'Capuccino', 'coffee with cream', 70, '1747117990_capuccino.jpg', 1, '2025-05-19 12:37:56'),
-(19, 12, 'Espresso ', 'Smashed beans', 80, '1747504378_espreso.jpg', 1, '2025-05-19 12:37:56'),
-(20, 12, 'Hot Americano', 'coffee with vanilla extract', 90, '1747872211_hot americano.jpg', 1, '2025-05-19 12:37:56'),
-(21, 13, 'dessert', 'chocolate cake', -1, '1747892040_1746946140_Cake.jpg', 1, '2025-05-22 05:34:00'),
-(22, 10, 'a', 'a', 1, '1747892072_1746945360_Pizza.jpg', 1, '2025-05-22 05:34:32'),
-(23, 10, 'a', 'a', 1, '1747892096_1746945480_Chicken.jpg', 1, '2025-05-22 05:34:56');
+INSERT INTO `product_list` (`id`, `category_id`, `name`, `description`, `price`, `quantity`, `img_path`, `status`, `date_created`) VALUES
+(1, 7, 'Pepperoni Pizza', 'Wow', 250, 8, '1759349223_1746945360_Pizza.jpg', 1, '2025-05-19 12:37:56'),
+(2, 7, 'Margherita Pizza', 'Wow2', 250, 5, '1759341622_1746951248_Margherita Pizza.jpg', 1, '2025-05-19 12:37:56'),
+(3, 9, 'Fried Chicken', 'Crispy', 150, 0, '1746951972_1746945480_Chicken.jpg', 1, '2025-05-19 12:37:56'),
+(4, 9, 'Grilled chicken', 'Yammy', 240, 0, '1746952134_Grilled chicken.jpg', 1, '2025-05-19 12:37:56'),
+(5, 7, 'Hawaiian Pizza', 'Mmm', 250, 0, '1746952916_Hawaiian Pizza.jpg', 1, '2025-05-19 12:37:56'),
+(6, 7, 'Veggie Pizza', 'Ulala', 250, 0, '1746952926_Veggie Pizza.jpg', 1, '2025-05-19 12:37:56'),
+(7, 9, ' Chicken curry', 'Damn', 280, 0, '1746953847_Chicken curry.jpg', 1, '2025-05-19 12:37:56'),
+(8, 9, 'Roasted chicken', 'Damnnn', 280, 0, '1746953890_Roasted chicken.jpg', 1, '2025-05-19 12:37:56'),
+(9, 10, 'Cheeseburger', 'Burger withCheese', 70, 0, '1747116237_Cheeseburger.jpg', 1, '2025-05-19 12:37:56'),
+(10, 10, 'Chicken burger', 'Burger with Chicken', 70, 0, '1747116284_Chicken burger.jpg', 1, '2025-05-19 12:37:56'),
+(11, 10, 'Hamburger', 'Burger With Ham', 70, 0, '1747116311_Hamburger.jpg', 1, '2025-05-19 12:37:56'),
+(12, 10, 'Veggie burger', 'Burger with Veggie', 70, 0, '1747116346_Veggie burger.jpg', 1, '2025-05-19 12:37:56'),
+(13, 11, 'Carrot Cake', 'cake with carrot', 150, 0, '1747117276_carrot.jpg', 1, '2025-05-19 12:37:56'),
+(14, 11, 'Chocolate Cake', 'cake with chocolate', 150, 0, '1747117339_chlate.jpg', 1, '2025-05-19 12:37:56'),
+(15, 11, 'Lava cake', 'chocolate vanilla', 180, 0, '1747117449_lava.jpg', 1, '2025-05-19 12:37:56'),
+(16, 11, 'Strawberry Cake', 'cake with strawberry flavor', 200, 0, '1747117501_strberry.jpg', 1, '2025-05-19 12:37:56'),
+(17, 12, 'Black Coffee', 'Greatest black caramel', 60, 0, '1747117937_black.jpg', 1, '2025-05-19 12:37:56'),
+(18, 12, 'Capuccino', 'coffee with cream', 70, 0, '1747117990_capuccino.jpg', 1, '2025-05-19 12:37:56'),
+(19, 12, 'Espresso ', 'Smashed beans', 80, 0, '1747504378_espreso.jpg', 1, '2025-05-19 12:37:56'),
+(20, 12, 'Hot Americano', 'coffee with vanilla extract', 90, 0, '1747872211_hot americano.jpg', 1, '2025-05-19 12:37:56'),
+(21, 13, 'dessert', 'chocolate cake', -1, 0, '1747892040_1746946140_Cake.jpg', 1, '2025-05-22 05:34:00'),
+(23, 10, 'a', 'a', 1, 0, '1747892096_1746945480_Chicken.jpg', 1, '2025-05-22 05:34:56');
 
 -- --------------------------------------------------------
 
@@ -238,8 +247,8 @@ INSERT INTO `user_info` (`user_id`, `first_name`, `last_name`, `email`, `passwor
 (8, 'Val', 'Francis', 'val@asiagate.com', '$2y$10$Qf4TxDRU2J/NBcW3RIIbYeC/339X/k7i6tUhjOnRniNIUmAda.iR2', '0983874827', '1234312', 'user'),
 (9, 'Zed', 'zws', 'zed@gmail.com', '$2y$10$S/iF08OX9ZrR0LbFwpLvRuy1P.6MXN.0pi1hQgxnDDj8X2mCHbyfC', '0978678976', 'bingag', 'user'),
 (10, 'milagresa', 'tabilo', 'milag@gmail.com', '$2y$10$CcIqSS0YJ685J.A6NQJ8YedT6UA5FRyjR76HR/OF2SlueSk9BgxtC', '1234567891', 'danao', 'user'),
-(11, 'ligma', 'ligmus', 'ligma@diddy.net', '$2y$10$e22rWVvb9om8UWq7K/y9pueIQK5KowpzIDO0uhHHCGo5kQUbEBmDO', '0765432198', 'Chelyabinsk, Russia', 'user'),
-(12, 'jay', 'ann', 'joemarieebarat123@gmail.com', '$2y$10$wc6jpI3js0fWRfo8rb5WK.4ozTTXZzF/s/8HK4xBEMCHYQK0H6L4u', '1234567890', 'here', 'user');
+(12, 'jay', 'ann', 'joemarieebarat123@gmail.com', '$2y$10$wc6jpI3js0fWRfo8rb5WK.4ozTTXZzF/s/8HK4xBEMCHYQK0H6L4u', '1234567890', 'here', 'user'),
+(13, 'Jon', 'Diddy', 'diddy@cec.edu.ph', '$2y$10$dJ/hOW7bhkOjx2T2wvAWfewgL3KQtEb6DjokCbZ/kXTpZL8shYdfa', '0765432198', 'Ligma Street', 'user');
 
 --
 -- Indexes for dumped tables
@@ -303,7 +312,7 @@ ALTER TABLE `user_info`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `category_list`
@@ -315,19 +324,19 @@ ALTER TABLE `category_list`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `order_list`
 --
 ALTER TABLE `order_list`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `product_list`
@@ -345,7 +354,7 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
