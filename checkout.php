@@ -90,6 +90,10 @@ $email = isset($user_info['email']) ? $user_info['email'] : '';
             <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded transition duration-200 shadow" type="submit">
               Place Order
             </button>
+            <a href="cart_list.php" class="btn-secondary w-full py-3 text-center shadow" type="button">
+              Back to Cart
+            </a>
+          </div>
           </div>
         </form>
       </div>

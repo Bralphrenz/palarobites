@@ -58,7 +58,6 @@ if (isset($_SESSION['user_id'])) {
       letter-spacing: 0.5px;
     }
 
-    /* Cleaned up modal styles - removed redundant properties */
     #categoryModal {
       z-index: 50;
       background: rgba(26, 26, 26, 0.85);
@@ -88,7 +87,6 @@ if (isset($_SESSION['user_id'])) {
       }
     }
 
-    /* Consolidated category card styles */
     .category-card {
       background: #ffffff;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -258,7 +256,6 @@ if (isset($_SESSION['user_id'])) {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
     }
 
-    /* Cleaned up swiper navigation styles */
     #categoryModal .swiper-button-next,
     #categoryModal .swiper-button-prev {
       color: var(--color-secondary);
@@ -297,7 +294,6 @@ if (isset($_SESSION['user_id'])) {
       border-radius: 5px;
     }
 
-    /* Hero section styles */
     .hero-section {
       position: relative;
       height: 600px;
@@ -328,10 +324,9 @@ if (isset($_SESSION['user_id'])) {
       backdrop-filter: blur(10px);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
-
-    /* Fixed hamburger menu - now only shows on mobile (≤768px) */
+    
     .hamburger-btn {
-      display: flex; /* Always show hamburger menu */
+      display: flex;
       flex-direction: column;
       gap: 5px;
       background: transparent;
@@ -361,7 +356,6 @@ if (isset($_SESSION['user_id'])) {
       transform: rotate(-45deg) translate(7px, -7px);
     }
 
-    /* Mobile menu styles */
     .mobile-menu {
       position: fixed;
       top: 0;

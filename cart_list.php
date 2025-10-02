@@ -11,12 +11,10 @@ session_start();
   <title>Shopping Cart - Programmers Guild</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Added Google Fonts for better typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* Enhanced design system with refined colors and typography */
     :root {
       --primary: #1e293b;
       --secondary: #475569;
@@ -25,6 +23,7 @@ session_start();
       --danger: #dc2626;
       --light: #f8fafc;
       --border: #e2e8f0;
+      --black: #000000;
     }
 
     * {
@@ -58,7 +57,6 @@ session_start();
       margin-right: 0.75rem;
     }
 
-    /* Refined cart item cards with better shadows and borders */
     .cart-item-card {
       background: white;
       border-radius: 1rem;
@@ -113,11 +111,10 @@ session_start();
 
     .price-value {
       font-weight: 600;
-      color: var(--success);
+      color: var(--black);
       font-size: 1.1rem;
     }
 
-    /* Enhanced quantity controls with better styling */
     .qty-controls {
       display: inline-flex;
       border: 1px solid var(--border);
@@ -155,7 +152,6 @@ session_start();
       outline: none;
     }
 
-    /* Refined remove button */
     .btn-remove {
       background: white;
       border: 1px solid var(--danger);
@@ -174,7 +170,6 @@ session_start();
       box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
     }
 
-    /* Enhanced order summary card */
     .summary-card {
       background: white;
       border-radius: 1rem;
@@ -233,12 +228,11 @@ session_start();
     }
 
     .total-amount span {
-      color: var(--success);
+      color: var(--black);
     }
 
-    /* Enhanced checkout button */
     .btn-checkout {
-      background: linear-gradient(135deg, var(--success) 0%, #047857 100%);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 1) 30%, rgba(139, 69, 19, 0.5) 100%);
       border: none;
       color: white;
       padding: 1rem;
@@ -247,19 +241,18 @@ session_start();
       font-size: 1.1rem;
       width: 100%;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+      box-shadow: 0 4px 12px rgba(26, 26, 26, 0.7);
     }
 
     .btn-checkout:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+      box-shadow: 0 6px 20px rgba(26, 26, 26, 0.7);
     }
 
     .btn-checkout i {
       margin-right: 0.5rem;
     }
 
-    /* Enhanced back to store button */
     .btn-back {
       background: white;
       border: 2px solid var(--primary);
@@ -284,7 +277,6 @@ session_start();
       margin-right: 0.5rem;
     }
 
-    /* Enhanced alert messages */
     .alert-custom {
       background: white;
       border: 1px solid var(--border);
@@ -346,7 +338,6 @@ session_start();
               $total += $item['qty'] * $item['price'];
               $order_summary .= '<li>' . $item['name'] . ' (' . $item['qty'] . 'x) - ' . $item['description'] . ' <span style="float:right;">₱' . number_format($item['qty'] * $item['price'], 2) . '</span></li>';
         ?>
-        <!-- Updated card structure with new classes -->
         <div class="cart-item-card">
           <div class="card-body">
             <div class="row align-items-center">
@@ -382,7 +373,6 @@ session_start();
         <?php } ?>
       </div>
       <div class="col-lg-4">
-        <!-- Updated summary card with new classes -->
         <div class="summary-card">
           <div class="card-body">
             <h5 class="summary-title"><i class="fas fa-receipt"></i>Order Summary</h5>

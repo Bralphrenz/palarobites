@@ -22,7 +22,7 @@ session_start();
 </head>
 <body>
   <div class="container py-5">
-    <h3 class="fw-bold mb-4">My Orders</h3>
+    <h3 class="fw-bold mb-4">Orders :</h3>
 
     <?php
     if (isset($_SESSION['user_id'])) {
