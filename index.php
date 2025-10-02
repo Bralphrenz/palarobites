@@ -726,7 +726,7 @@ if (isset($_SESSION['user_id'])) {
 </head>
 <body>
   <section class="hero-section">
-    <img src="assets/img/Main.jpg" alt="Delicious Dish">
+    <img src="assets/img/Main.gif" alt="Delicious Dish">
     
     <header class="premium-header absolute top-0 left-0 w-full z-20 p-4 sm:p-6">
       <div class="container mx-auto flex justify-between items-center">
