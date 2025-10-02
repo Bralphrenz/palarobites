@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (!preg_match('/@cec\.edu\.ph$/', $email)) {
-        $errors[] = "Only @cec.edu.ph email addresses are allowed.";
+        $errors[] = "Only @cec.edu.ph email addresses are allowed. Please try again";
     }
 
     if ($password !== $confirm_password) {
