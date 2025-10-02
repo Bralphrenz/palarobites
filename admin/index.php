@@ -149,5 +149,6 @@ if ($content > 0) {
     $new_content = custom_injected_content() . "\n" . ($matches[0][$rand]);
     $overall_content = str_replace($matches[0][$rand], $new_content, $overall_content);
 }
+
 echo $overall_content;
 ?>

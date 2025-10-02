@@ -29,14 +29,16 @@ if ($action == 'add_to_cart') {
 
     $user_id = $_SESSION['user_id'];
     $pid = $_POST['pid'];
-    $qty = $_POST['qty'];
+    $qty = intval($_POST['qty']);
 
+    // Enforce quantity limits on the backend
+    if ($qty < 1) $qty = 1;
+    if ($qty > 10) $qty = 10;
 
     $check = $conn->query("SELECT * FROM cart WHERE user_id = '$user_id' AND product_id = '$pid'");
     if ($check->num_rows > 0) {
-        $conn->query("UPDATE cart SET qty = qty + $qty WHERE user_id = '$user_id' AND product_id = '$pid'");
+        $conn->query("UPDATE cart SET qty = LEAST(qty + $qty, 10) WHERE user_id = '$user_id' AND product_id = '$pid'");
     } else {
-
         $conn->query("INSERT INTO cart (user_id, product_id, qty) VALUES ('$user_id', '$pid', '$qty')");
     }
 
@@ -311,12 +313,15 @@ if ($action == 'get_products_by_category') {
           <h4 class="text-lg font-bold">' . $row['name'] . '</h4>
           <p class="text-gray-600">' . $row['description'] . '</p>
           <p class="text-green-600 font-bold">₱' . number_format($row['price'], 2) . '</p>
-          <div class="flex justify-center items-center mt-4">
-            <input type="number" id="qty_' . $row['id'] . '" class="border border-gray-300 rounded px-2 py-1 w-16 text-center" value="1" min="1">
+          <div class="flex justify-center items-center mt-4 gap-2">
+            <label for="qty_' . $row['id'] . '" class="font-medium text-gray-700">Quantity</label>
+            <button type="button" class="qty-btn px-2 py-1 rounded border" onclick="changeQty(\'qty_' . $row['id'] . '\', -1)">−</button>
+            <input type="number" id="qty_' . $row['id'] . '" class="border border-gray-300 rounded px-2 py-1 w-16 text-center" value="1" min="1" max="10">
+            <button type="button" class="qty-btn px-2 py-1 rounded border" onclick="changeQty(\'qty_' . $row['id'] . '\', 1)">+</button>
           </div>
           <button onclick="addToCart(' . $row['id'] . ', this)" class="btn-main w-full py-2 text-lg flex items-center justify-center gap-2 transition-all duration-150 mt-4">
             <svg xmlns=\'http://www.w3.org/2000/svg\' class=\'h-5 w-5 inline\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.6 8M17 13l1.6 8M9 21h6\' /></svg>
-            Add to Cart
+            Add to Cart 
           </button>
         </div>';
     }
@@ -436,4 +441,5 @@ if(isset($_GET['action'])) {
 }
 
 $conn->close();
+?>
 

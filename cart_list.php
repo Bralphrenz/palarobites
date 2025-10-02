@@ -249,13 +249,6 @@ session_start();
       box-shadow: 0 6px 20px rgba(26, 26, 26, 0.7);
     }
 
-    .btn-checkout:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
     .btn-checkout i {
       margin-right: 0.5rem;
     }
@@ -305,22 +298,6 @@ session_start();
       text-decoration: underline;
     }
 
-    /* Loading spinner */
-    .loading-spinner {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid var(--success);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .page-title {
@@ -353,15 +330,10 @@ session_start();
         <?php
         $total = 0;
         $order_summary = '';
-        $has_out_of_stock = false;
-        $cart_item_count = 0;
-        
         if (isset($_SESSION['user_id'])) {
           $user_id = $_SESSION['user_id'];
-          $cart_items = $conn->query("SELECT c.*, p.name, p.price, p.img_path, p.description, p.quantity as available_qty FROM cart c JOIN product_list p ON c.product_id = p.id WHERE c.user_id = '$user_id'");
-          
+          $cart_items = $conn->query("SELECT c.*, p.name, p.price, p.img_path, p.description FROM cart c JOIN product_list p ON c.product_id = p.id WHERE c.user_id = '$user_id'");
           if ($cart_items->num_rows > 0):
-            $cart_item_count = $cart_items->num_rows;
             while ($item = $cart_items->fetch_assoc()):
               $total += $item['qty'] * $item['price'];
               $order_summary .= '<li>' . $item['name'] . ' (' . $item['qty'] . 'x) - ' . $item['description'] . ' <span style="float:right;">₱' . number_format($item['qty'] * $item['price'], 2) . '</span></li>';
@@ -378,25 +350,14 @@ session_start();
                 </h5>
                 <p class="product-description"><?php echo $item['description']; ?></p>
                 <p class="price-label mb-3">Price: <span class="price-value">₱<?php echo number_format($item['price'], 2); ?></span></p>
-                
-                <!-- Stock availability info -->
-                <div class="stock-info <?php echo $stock_class; ?>" id="stock-info-<?php echo $item['id']; ?>">
-                  <?php echo $stock_text; ?>
-                </div>
-                
-                <!-- Quantity controls -->
-                <div class="qty-controls mt-2 <?php echo $is_out_of_stock ? 'disabled' : ''; ?>" id="qty-controls-<?php echo $item['id']; ?>">
-                  <button class="qty-minus" data-id="<?php echo $item['id']; ?>" data-product-id="<?php echo $item['product_id']; ?>" <?php echo $is_out_of_stock ? 'disabled' : ''; ?>>
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <input type="number" id="qty-input-<?php echo $item['id']; ?>" value="<?php echo $item['qty']; ?>" readonly data-max="<?php echo $available_qty; ?>" class="quantity-input">
-                  <button class="qty-plus" data-id="<?php echo $item['id']; ?>" data-product-id="<?php echo $item['product_id']; ?>" <?php echo $is_out_of_stock ? 'disabled' : ''; ?>>
-                    <i class="fas fa-plus"></i>
-                  </button>
+                <div class="qty-controls">
+                  <button class="qty-minus" data-id="<?php echo $item['id']; ?>"><i class="fas fa-minus"></i></button>
+                  <input type="number" value="<?php echo $item['qty']; ?>" readonly>
+                  <button class="qty-plus" data-id="<?php echo $item['id']; ?>"><i class="fas fa-plus"></i></button>
                 </div>
               </div>
               <div class="col-md-4 text-end">
-                <p class="price-label mb-3">Total: <span class="price-value" style="font-size: 1.25rem;" id="item-total-<?php echo $item['id']; ?>">₱<?php echo number_format($item_total, 2); ?></span></p>
+                <p class="price-label mb-3">Total: <span class="price-value" style="font-size: 1.25rem;">₱<?php echo number_format($item['qty'] * $item['price'], 2); ?></span></p>
                 <button class="btn-remove remove-item" data-id="<?php echo $item['id']; ?>">
                   <i class="fas fa-trash-alt"></i> Remove
                 </button>
@@ -417,7 +378,7 @@ session_start();
             <h5 class="summary-title"><i class="fas fa-receipt"></i>Order Summary</h5>
             <hr class="summary-divider">
             <ul class="summary-list">
-              <?php echo $order_summary; '<li>No items in cart</li>'; ?>
+              <?php echo $order_summary; ?>
               <li style="display: flex; justify-content: space-between; align-items: center;">
                 <span><strong>Delivery Fee</strong></span>
                 <span>₱5.00</span>
@@ -429,13 +390,6 @@ session_start();
             <button class="btn-checkout" id="checkout">
               <i class="fas fa-credit-card"></i>Proceed to Checkout
             </button>
-            
-            <!-- Continue shopping link -->
-            <div class="text-center mt-3">
-              <a href="index.php" class="text-decoration-none">
-                <i class="fas fa-arrow-left"></i> Continue Shopping
-              </a>
-            </div>
           </div>
         </div>
       </div>
@@ -451,154 +405,66 @@ session_start();
     $(document).ready(function() {
       updateCartCount();
 
-      // Quantity control handlers
       $('.qty-minus, .qty-plus').click(function() {
         const id = $(this).data('id');
-        const productId = $(this).data('product-id');
         const isPlus = $(this).hasClass('qty-plus');
-        const input = $(`#qty-input-${id}`);
+        const input = $(this).siblings('input');
         let qty = parseInt(input.val());
-        const maxQty = parseInt(input.data('max'));
-        const price = parseFloat($(`#item-total-${id}`).text().replace('₱', '').replace(',', '')) / qty;
 
-        qty = isPlus ? qty + 1 : qty - 1;
-        
-        // Validate quantity
-        if (qty < 1) {
-          alert('Quantity cannot be less than 1');
-          return;
+        if (isPlus) {
+          if (qty >= 10) return; // Prevent going above 10
+          qty++;
+        } else {
+          qty--;
         }
-        
-        if (qty > maxQty) {
-          alert(`${maxQty} Qty reached.`);
-          qty = maxQty;
-          input.val(qty);
-          return;
-        }
+        if (qty < 1) return; // Prevent going below 1
 
         input.val(qty);
-        updateCartQty(id, qty, productId, price);
+        updateCartQty(id, qty);
       });
 
-      // Remove item handler
       $('.remove-item').click(function () {
         const id = $(this).data('id'); 
-        const itemElement = $(`#cart-item-${id}`);
-        
-        if (confirm('Are you sure you want to remove this item from your cart?')) {
-          // Show loading state
-          const removeBtn = $(this);
-          const originalHtml = removeBtn.html();
-          removeBtn.html('<span class="loading-spinner"></span> Removing...');
-          removeBtn.prop('disabled', true);
-
+        if (confirm('Are you sure you want to remove this item?')) {
           $.ajax({
             url: 'admin/ajax.php?action=delete_cart',
             method: 'POST',
             data: { id },
             success: function (response) {
               if (response == 1) {
-                // Smooth removal animation
-                itemElement.fadeOut(300, function() {
-                  $(this).remove();
-                  updateCartCount();
-                  location.reload(); // Reload to update totals
-                });
+                alert('Item removed successfully.');
+                updateCartCount();
+                location.reload();
               } else {
                 alert('Failed to remove the item. Please try again.');
-                removeBtn.html(originalHtml);
-                removeBtn.prop('disabled', false);
               }
             },
             error: function () {
               alert('An error occurred while removing the item.');
-              removeBtn.html(originalHtml);
-              removeBtn.prop('disabled', false);
             },
           });
         }
       });
 
-      // Update cart quantity function
-      function updateCartQty(id, qty, productId, price) {
-        // Show loading state
-        const qtyControls = $(`#qty-controls-${id}`);
-        const originalOpacity = qtyControls.css('opacity');
-        qtyControls.css('opacity', '0.6');
-        qtyControls.find('button').prop('disabled', true);
-
-        // First check stock availability
+      function updateCartQty(id, qty) {
         $.ajax({
-          url: 'admin/ajax.php?action=check_product_stock',
+          url: 'admin/ajax.php?action=update_cart_qty',
           method: 'POST',
-          data: { product_id: productId },
-          success: function(stockResponse) {
-            const availableStock = parseInt(stockResponse);
-            
-            if (qty > availableStock) {
-              alert(`Only ${availableStock} items available in stock.`);
-              location.reload(); // Reload to get updated quantities
-              return;
+          data: { id, qty },
+          success: function(response) {
+            if (response == 1) {
+              updateCartCount();
+              location.reload();
+            } else {
+              alert('Failed to update quantity.');
             }
-
-            // If stock is sufficient, update cart quantity
-            $.ajax({
-              url: 'admin/ajax.php?action=update_cart_qty',
-              method: 'POST',
-              data: { id, qty },
-              success: function(response) {
-                qtyControls.css('opacity', originalOpacity);
-                qtyControls.find('button').prop('disabled', false);
-                
-                if (response == 1) {
-                  // Update item total
-                  const newTotal = price * qty;
-                  $(`#item-total-${id}`).text('₱' + newTotal.toFixed(2));
-                  
-                  updateCartCount();
-                  updateCartTotal();
-                  
-                  // Show success feedback
-                  const input = $(`#qty-input-${id}`);
-                  input.addClass('bg-success bg-opacity-10');
-                  setTimeout(() => input.removeClass('bg-success bg-opacity-10'), 1000);
-                  
-                } else if (response === 'stock_exceeded') {
-                  alert('Requested quantity exceeds available stock.');
-                  location.reload();
-                } else {
-                  alert('Failed to update quantity.');
-                  location.reload();
-                }
-              },
-              error: function() {
-                qtyControls.css('opacity', originalOpacity);
-                qtyControls.find('button').prop('disabled', false);
-                alert('An error occurred while updating the quantity.');
-              }
-            });
           },
           error: function() {
-            qtyControls.css('opacity', originalOpacity);
-            qtyControls.find('button').prop('disabled', false);
-            alert('An error occurred while checking product availability.');
+            alert('An error occurred while updating the quantity.');
           }
         });
       }
 
-      // Update cart total function
-      function updateCartTotal() {
-        let newTotal = 0;
-        $('.price-value').each(function() {
-          if ($(this).attr('style') && $(this).attr('style').includes('font-size: 1.25rem')) {
-            const itemTotal = parseFloat($(this).text().replace('₱', '').replace(',', ''));
-            newTotal += itemTotal;
-          }
-        });
-        $('#cart-total').text('₱' + newTotal.toFixed(2));
-      }
-
-      // Update cart count in header
       function updateCartCount() {
         $.ajax({
           url: 'admin/ajax.php?action=get_cart_count',
@@ -612,78 +478,13 @@ session_start();
         });
       }
 
-      // Checkout handler
       $('#checkout').click(function() {
         <?php if (isset($_SESSION['user_id'])): ?>
-          // Check if any items are out of stock before proceeding
-          let canProceed = true;
-          $('.stock-out-of-stock').each(function() {
-            if ($(this).is(':visible')) {
-              canProceed = false;
-              return false;
-            }
-          });
-
-          if (!canProceed) {
-            alert('Please remove out-of-stock items before proceeding to checkout.');
-            return;
-          }
-
-          // Check if cart is empty
-          if (<?php echo $cart_item_count; ?> === 0) {
-            alert('Your cart is empty. Please add items before checking out.');
-            return;
-          }
-
-          // Show loading state
-          const checkoutBtn = $(this);
-          const originalHtml = checkoutBtn.html();
-          checkoutBtn.html('<span class="loading-spinner"></span> Processing...');
-          checkoutBtn.prop('disabled', true);
-
-          setTimeout(() => {
-            window.location.href = 'checkout.php';
-          }, 1000);
-
+          window.location.href = 'checkout.php';
         <?php else: ?>
           alert('You must be logged in to proceed to checkout.');
           window.location.href = 'login.php';
         <?php endif; ?>
-      });
-
-      // Keyboard shortcuts
-      $(document).keydown(function(e) {
-        // Ctrl + - to decrease quantity (for the first item)
-        if (e.ctrlKey && e.key === '-') {
-          e.preventDefault();
-          $('.qty-minus').first().click();
-        }
-        // Ctrl + + to increase quantity (for the first item)
-        if (e.ctrlKey && e.key === '+') {
-          e.preventDefault();
-          $('.qty-plus').first().click();
-        }
-        // Ctrl + Delete to remove item (for the first item)
-        if (e.ctrlKey && e.key === 'Delete') {
-          e.preventDefault();
-          $('.remove-item').first().click();
-        }
-      });
-
-      // Auto-save on quantity change (with debounce)
-      let saveTimeout;
-      $('.quantity-input').on('input', function() {
-        clearTimeout(saveTimeout);
-        const id = $(this).attr('id').replace('qty-input-', '');
-        const productId = $(`button[data-id="${id}"]`).data('product-id');
-        const qty = parseInt($(this).val());
-        const price = parseFloat($(`#item-total-${id}`).text().replace('₱', '').replace(',', '')) / (qty - 1);
-
-        if (qty >= 1) {
-          saveTimeout = setTimeout(() => {
-            updateCartQty(id, qty, productId, price);
-          }, 1000);
-        }
       });
     });
   </script>

@@ -722,6 +722,21 @@ if (isset($_SESSION['user_id'])) {
         bottom: 5rem;
       }
     }
+  .qty-btn {
+    background: #eee;
+    border: 1px solid #ccc;
+    font-size: 1.25rem;
+    font-weight: bold;
+    width: 2rem;
+    height: 2rem;
+    line-height: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .qty-btn:hover {
+    background: #d4af37;
+    color: #222;
+  }
   </style>
 </head>
 <body>
@@ -1206,6 +1221,23 @@ function fetchMessages() {
 
     setInterval(fetchMessages, 5000);
     fetchMessages();
+
+    // Enforce quantity between 1 and 10 on all devices
+$(document).on('input', 'input[type="number"][id^="qty_"]', function() {
+  let val = parseInt(this.value, 10);
+  if (isNaN(val) || val < 1) this.value = 1;
+  if (val > 10) this.value = 10;
+});
+
+function changeQty(inputId, delta) {
+  var input = document.getElementById(inputId);
+  var val = parseInt(input.value) || 1;
+  val += delta;
+  if (val < 1) val = 1;
+  if (val > 10) val = 10;
+  input.value = val;
+  $(input).trigger('input');
+}
   </script>
 </body>
 </html>
